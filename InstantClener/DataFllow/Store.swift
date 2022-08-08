@@ -20,8 +20,13 @@ class Store: ObservableObject {
 extension Store {
     
     private func commonInit() {
+        
+        dispatch(.adRequestConfig)
+        dispatch(.adCacheTimeout)
+        
         dispatch(.launchBegin)
         dispatch(.speedRequestIP)
+        
         dispatch(.logProperty(.local))
         dispatch(.logEvent(.open))
         dispatch(.logEvent(.openCold))
@@ -61,6 +66,8 @@ extension Store {
         case .rootAlert(let message):
             appState.root.alertMessage = message
             appState.root.isAlert = true
+        case .rootBackgrund(let isEnter):
+            appState.root.isEnterbackground = isEnter
             
         case .launchBegin:
             appState.root.selection = .launch
@@ -229,6 +236,37 @@ extension Store {
             appCommand = FirebasePropertyCommand(property, value)
         case .logEvent(let event, let params):
             appCommand = FirebaseEvnetCommand(event, params)
+        
+        case .adRequestConfig:
+            appCommand = ADRequestConfigCommand()
+        case .adUpdateConfig(let config):
+            appState.ad.adConfig = config
+        case .adIncreaseShowTimes:
+            appCommand = ADIncreaseTimesCommand(.show)
+        case .adIncreaseClickTimes:
+            appCommand = ADIncreaseTimesCommand(.click)
+        case .adCanShowADmobDate(let date):
+            appState.ad.isUserCanShowAdmobDate = date
+        case .adLoad(let position):
+            appCommand = ADLoadCommand(position)
+        case .adShow(let position, let compeltion):
+            appCommand = ADShowCommand(position, compeltion)
+        case .adDisplay(let position):
+            appCommand = ADDisplayCommand(position)
+        case .adDisapear(let position):
+            appCommand = ADDisapearCommand(position)
+        case .adClean(let position):
+            appCommand = ADCleanCommand(position)
+        case .adCacheTimeout:
+            appCommand = ADCacheTimeoutCommand()
+        case .adDismiss:
+            appCommand = ADDismissCommand()
+        case .adUpdateImpressionDate(let position):
+            appState.ad.ads.filter {
+                $0.position == position
+            }.first?.impressionDate = Date()
+        case .updateADNativeModel(let model):
+            appState.root.adModel = model
         }
         return (appState, appCommand)
     }

@@ -1,5 +1,5 @@
 //
-//  AppState.swift
+//  state.swift
 //  InstantCleaner
 //
 //  Created by yangjian on 2022/7/29.
@@ -33,6 +33,7 @@ struct AppState {
     var speed = Speed()
     var compression = Compression()
     var firebase = Firebase()
+    var ad = AD()
 }
 
 extension AppState {
@@ -44,6 +45,10 @@ extension AppState {
         var isAlert: Bool = false
         /// 弹窗详情
         var alertMessage: String = "Unknow."
+    
+        /// 原生广告
+        var adModel: NativeViewModel = .None
+
         enum Index {
             case launch, tab
         }
@@ -69,13 +74,13 @@ extension AppState {
         /// 最短加载时间
         var minTime = 2.0
         /// 最长加载时间
-        var maxTime = 10.0
+        var maxTime = 16.0
     }
 }
 
 extension AppState {
     struct Permission {
-        @UserDefault(key: "AppState.permission.alert")
+        @UserDefault(key: "state.permission.alert")
         var alert: Bool?
         var photoStatus: PHAuthorizationStatus = .authorized
         var contactStatus: CNAuthorizationStatus = .authorized
@@ -505,15 +510,52 @@ extension AppState {
     }
 }
 
-
-extension UInt64 {
-    var format: (String, String) {
-        if self < 1024 * 1024 {
-            return (String(format: "%.1f", Double(self) / 1024.0 ), "KB")
-        } else if self < 1024 * 1024 * 1024 {
-            return (String(format: "%.1f", Double(self) / 1024.0 / 1024.0), "MB")
-        } else {
-            return (String(format: "%.1f", Double(self) / 1024.0 / 1024.0 / 1024.0), "GB")
+extension AppState {
+    struct AD {
+        /// 用戶惡意點擊 48小時無法請求admob
+        var isUserCanShowAdmob: Bool {
+            if isUserCanShowAdmobDate == nil {
+                return true
+            }
+            return Date().timeIntervalSince1970 >= (isUserCanShowAdmobDate ?? Date()).timeIntervalSince1970
+        }
+        
+        /// 遠程或者本地配置
+        @UserDefault(key: "state.ad.config")
+        var adConfig: ADConfig?
+        
+        /// 惡意點擊时间
+        @UserDefault(key: "state.ad.date")
+        var isUserCanShowAdmobDate: Date?
+       
+        /// 本地紀錄點擊次數和展示次數
+        @UserDefault(key: "state.ad.limit")
+        var limit: ADLimit?
+        
+        /// 广告位加载模型
+        let ads:[ADLoadModel] = ADPosition.allCases.map { p in
+            ADLoadModel(position: p)
+        }.filter { m in
+            m.position != .all
+        }
+        
+        func isLoaded(_ position: ADPosition) -> Bool {
+            return self.ads.filter {
+                $0.position == position
+            }.first?.isLoaded == true
+        }
+        
+        /// 是否超出限制
+        func isLimited(in store: Store) -> Bool {
+            if limit?.date.isToday == true {
+                if (store.state.ad.limit?.showTimes ?? 0) >= (store.state.ad.adConfig?.showTimes ?? 0) || (store.state.ad.limit?.clickTimes ?? 0) >= (store.state.ad.adConfig?.clickTimes ?? 0) {
+                    return true
+                }
+            }
+            return false
         }
     }
 }
+
+
+

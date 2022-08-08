@@ -14,4 +14,6 @@ target 'InstantClener' do
     pod "BSImagePicker", "~> 3.1"
     pod 'lottie-ios'
     pod 'FBSDKCoreKit'
+    pod 'Google-Mobile-Ads-SDK'
+    pod 'SnapKit'
 end

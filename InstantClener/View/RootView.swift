@@ -25,8 +25,13 @@ struct RootView: View {
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             /// 前台
             store.dispatch(.logEvent(.openHot))
+            store.dispatch(.rootBackgrund(false))
+            store.dispatch(.launchBegin)
+            store.dispatch(.adRequestConfig)
+            
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
             /// 后台
+            store.dispatch(.rootBackgrund(true))
         }
     }
 }

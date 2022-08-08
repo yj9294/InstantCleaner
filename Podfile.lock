@@ -86,6 +86,9 @@ PODS:
     - FirebaseInstallations (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - Google-Mobile-Ads-SDK (9.8.0):
+    - GoogleAppMeasurement (< 10.0, >= 7.0)
+    - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleAppMeasurement (9.3.0):
     - GoogleAppMeasurement/AdIdSupport (= 9.3.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
@@ -110,6 +113,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUserMessagingPlatform (2.0.0)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -138,6 +142,7 @@ PODS:
   - nanopb/encode (2.30909.0)
   - OpenCV2 (4.3.0)
   - PromisesObjC (2.1.1)
+  - SnapKit (5.6.0)
 
 DEPENDENCIES:
   - ASCollectionView-SwiftUI (~> 1.3)
@@ -146,8 +151,10 @@ DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Crashlytics
   - Firebase/Performance
+  - Google-Mobile-Ads-SDK
   - lottie-ios
   - OpenCV2 (~> 4.3.0)
+  - SnapKit
 
 SPEC REPOS:
   trunk:
@@ -167,13 +174,16 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebasePerformance
     - FirebaseRemoteConfig
+    - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
+    - GoogleUserMessagingPlatform
     - GoogleUtilities
     - lottie-ios
     - nanopb
     - OpenCV2
     - PromisesObjC
+    - SnapKit
 
 SPEC CHECKSUMS:
   ASCollectionView-SwiftUI: 9c24b5293f22e565619edeac39f99de398ce9874
@@ -192,14 +202,17 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 61db1054e688d2bdc4e2b3f744c1b086e913b742
   FirebasePerformance: 18bb0984808ec429fae69fb5f1da4a68f57605b1
   FirebaseRemoteConfig: 6d9982bc64548a6e3c1b497b9fa53938ad135f2d
+  Google-Mobile-Ads-SDK: a6a8fe7ebb1daf345ccdc225a99c1b3074ce0376
   GoogleAppMeasurement: b907bdad775b6975a8108762345b2cfbf1a93c37
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
+  GoogleUserMessagingPlatform: ab890ce5f6620f293a21b6bdd82e416a2c73aeca
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   lottie-ios: 016449b5d8be0c3dcbcfa0a9988469999cd04c5d
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OpenCV2: ffe82e5cb5d16dc3fc01a5f4127b9a5b3cfc7d1b
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: 5bbf40c12a596c219378de220ee74baf489ec923
+PODFILE CHECKSUM: d11cfec31ff49ef93bcb4498c257f806ad78b1d1
 
 COCOAPODS: 1.11.2

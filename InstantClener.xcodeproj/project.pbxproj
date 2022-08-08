@@ -71,6 +71,12 @@
 		C71A1E0028A0E3FB0046F65E /* HostURLFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1DC628A0E3FB0046F65E /* HostURLFormatter.swift */; };
 		C71A1E0128A0E3FB0046F65E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C71A1DC828A0E3FB0046F65E /* Reachability.m */; };
 		C71A1E0228A0E3FB0046F65E /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1DCA28A0E3FB0046F65E /* Helper.swift */; };
+		C71A1E0528A0F0400046F65E /* ADCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1E0428A0F0400046F65E /* ADCommand.swift */; };
+		C71A1E0728A0F1CE0046F65E /* ADConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1E0628A0F1CE0046F65E /* ADConfig.swift */; };
+		C71A1E0928A0F1F00046F65E /* ADModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1E0828A0F1F00046F65E /* ADModel.swift */; };
+		C71A1E0B28A0F8090046F65E /* NativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1E0A28A0F8090046F65E /* NativeView.swift */; };
+		C71A1E0D28A0F9E60046F65E /* UINativeADView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71A1E0C28A0F9E60046F65E /* UINativeADView.swift */; };
+		C71A1E0F28A108EC0046F65E /* admob.json in Resources */ = {isa = PBXBuildFile; fileRef = C71A1E0E28A108EC0046F65E /* admob.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -152,6 +158,12 @@
 		C71A1DC928A0E3FB0046F65E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C71A1DCA28A0E3FB0046F65E /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		C71A1DCB28A0E3FB0046F65E /* InstanCleaner-Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "InstanCleaner-Bridge.h"; sourceTree = "<group>"; };
+		C71A1E0428A0F0400046F65E /* ADCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADCommand.swift; sourceTree = "<group>"; };
+		C71A1E0628A0F1CE0046F65E /* ADConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADConfig.swift; sourceTree = "<group>"; };
+		C71A1E0828A0F1F00046F65E /* ADModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADModel.swift; sourceTree = "<group>"; };
+		C71A1E0A28A0F8090046F65E /* NativeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeView.swift; sourceTree = "<group>"; };
+		C71A1E0C28A0F9E60046F65E /* UINativeADView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINativeADView.swift; sourceTree = "<group>"; };
+		C71A1E0E28A108EC0046F65E /* admob.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = admob.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +199,7 @@
 		5DAF92BB28A0B4AA00D49324 /* InstantClener */ = {
 			isa = PBXGroup;
 			children = (
+				C71A1E0E28A108EC0046F65E /* admob.json */,
 				C71A1D7528A0E3990046F65E /* GoogleService-Info.plist */,
 				C71A1D7728A0E3990046F65E /* img_0.png */,
 				C71A1D7628A0E3990046F65E /* Launch Screen.storyboard */,
@@ -214,6 +227,7 @@
 		C71A1D7C28A0E3FB0046F65E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C71A1E0A28A0F8090046F65E /* NativeView.swift */,
 				C71A1D8C28A0E3FB0046F65E /* AlertView.swift */,
 				C71A1D9428A0E3FB0046F65E /* CalendarView.swift */,
 				C71A1D9528A0E3FB0046F65E /* CleanView.swift */,
@@ -238,6 +252,7 @@
 				C71A1D8128A0E3FB0046F65E /* SpeedView.swift */,
 				C71A1D8928A0E3FB0046F65E /* TabbarView.swift */,
 				C71A1D8628A0E3FB0046F65E /* TermsView.swift */,
+				C71A1E0C28A0F9E60046F65E /* UINativeADView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -255,6 +270,9 @@
 				C71A1D9D28A0E3FB0046F65E /* SpeedCommand.swift */,
 				C71A1D9828A0E3FB0046F65E /* State.swift */,
 				C71A1D9E28A0E3FB0046F65E /* Store.swift */,
+				C71A1E0428A0F0400046F65E /* ADCommand.swift */,
+				C71A1E0628A0F1CE0046F65E /* ADConfig.swift */,
+				C71A1E0828A0F1F00046F65E /* ADModel.swift */,
 			);
 			path = DataFllow;
 			sourceTree = "<group>";
@@ -462,6 +480,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C71A1E0F28A108EC0046F65E /* admob.json in Resources */,
 				5DAF92C428A0B4AB00D49324 /* Preview Assets.xcassets in Resources */,
 				C71A1D7928A0E3990046F65E /* GoogleService-Info.plist in Resources */,
 				C71A1D7B28A0E3990046F65E /* img_0.png in Resources */,
@@ -532,6 +551,7 @@
 				C71A1DF328A0E3FB0046F65E /* AMSimilarityManager.m in Sources */,
 				C71A1DE028A0E3FB0046F65E /* SettingView.swift in Sources */,
 				C71A1E0128A0E3FB0046F65E /* Reachability.m in Sources */,
+				C71A1E0D28A0F9E60046F65E /* UINativeADView.swift in Sources */,
 				C71A1DFA28A0E3FB0046F65E /* SpeedTestService.swift in Sources */,
 				C71A1DE228A0E3FB0046F65E /* CalendarView.swift in Sources */,
 				C71A1DE128A0E3FB0046F65E /* LoadingView.swift in Sources */,
@@ -546,6 +566,7 @@
 				C71A1DCC28A0E3FB0046F65E /* ContactView.swift in Sources */,
 				C71A1DFB28A0E3FB0046F65E /* SpeedTestHost.swift in Sources */,
 				C71A1DF028A0E3FB0046F65E /* AMCompare.mm in Sources */,
+				C71A1E0928A0F1F00046F65E /* ADModel.swift in Sources */,
 				C71A1DEE28A0E3FB0046F65E /* MonitorFlow.m in Sources */,
 				C71A1DDB28A0E3FB0046F65E /* LaunchView.swift in Sources */,
 				C71A1DDD28A0E3FB0046F65E /* CompressionView.swift in Sources */,
@@ -556,7 +577,9 @@
 				C71A1DE928A0E3FB0046F65E /* FirebaseCommand.swift in Sources */,
 				C71A1DCD28A0E3FB0046F65E /* ContactManageView.swift in Sources */,
 				C71A1DD028A0E3FB0046F65E /* PhotoPermissionView.swift in Sources */,
+				C71A1E0528A0F0400046F65E /* ADCommand.swift in Sources */,
 				C71A1DD728A0E3FB0046F65E /* TabbarView.swift in Sources */,
+				C71A1E0728A0F1CE0046F65E /* ADConfig.swift in Sources */,
 				C71A1DE628A0E3FB0046F65E /* Command.swift in Sources */,
 				C71A1DFD28A0E3FB0046F65E /* URL+ping.swift in Sources */,
 				C71A1DE528A0E3FB0046F65E /* State.swift in Sources */,
@@ -569,6 +592,7 @@
 				C71A1DFC28A0E3FB0046F65E /* URLResponse+Checking.swift in Sources */,
 				C71A1DF428A0E3FB0046F65E /* AMOrbAssetsCompare.mm in Sources */,
 				C71A1DD428A0E3FB0046F65E /* TermsView.swift in Sources */,
+				C71A1E0B28A0F8090046F65E /* NativeView.swift in Sources */,
 				C71A1DF228A0E3FB0046F65E /* AMHistogramCompare.mm in Sources */,
 				C71A1DDF28A0E3FB0046F65E /* DeleteView.swift in Sources */,
 				C71A1DE728A0E3FB0046F65E /* CalendarCommand.swift in Sources */,

@@ -246,6 +246,9 @@ extension HomeView {
         store.dispatch(.homeStartScanAnimation)
         store.dispatch(.logEvent(.homeShow))
         store.dispatch(.logEvent(.homeScan))
+        
+        store.dispatch(.adLoad(.interstitial))
+        store.dispatch(.adLoad(.native))
     }
     
     func hideView() {

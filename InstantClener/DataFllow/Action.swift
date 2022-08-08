@@ -27,6 +27,8 @@ enum Action {
     // MARK: Root
     // 系统弹窗
     case rootAlert(String)
+    // 是否进入后台
+    case rootBackgrund(Bool)
     
     // MARK: launch
     /// 冷热启动
@@ -117,6 +119,22 @@ enum Action {
     
     case logEvent(AppState.Firebase.FirebaseEvent,[String:String]? = nil)
     case logProperty(AppState.Firebase.FirebaseProperty, String? = nil)
+    
+    case adRequestConfig
+    case adUpdateConfig(ADConfig?)
+    case adIncreaseClickTimes
+    case adIncreaseShowTimes
+    case adCanShowADmobDate(Date?)
+    
+    case adLoad(ADPosition)
+    case adShow(ADPosition, ()->Void)
+    case adDisplay(ADPosition)
+    case adDisapear(ADPosition)
+    case adClean(ADPosition)
+    case adUpdateImpressionDate(ADPosition)
+    case adCacheTimeout
+    case adDismiss
+    case updateADNativeModel(NativeViewModel)
     
     /// 是否开启日志
     var isLog: Bool {

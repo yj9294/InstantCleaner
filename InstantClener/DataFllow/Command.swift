@@ -31,10 +31,11 @@ extension AnyCancellable {
 struct LaunchCommand: Command {
     func execute(in store: Store) {
         /// 1. 在 2s 内快速走完 80% 进度，1s 内走完剩余进度
-        let duration = store.state.launch.minTime / 0.8
+        let duration = store.state.launch.minTime / 0.6
         store.dispatch(.launchDuration(duration))
         let token = SubscriptionToken()
         let token1 = SubscriptionToken()
+        var isNeedShowAD = false
         Timer.publish(every: 0.01, on: .main, in: .common).autoconnect().sink { _ in
             let progress = store.state.launch.progress
             let totalCount = 1.0 / 0.01 * store.state.launch.duration
@@ -43,14 +44,26 @@ struct LaunchCommand: Command {
                 store.dispatch(.launchProgress(value))
             } else {
                 token.unseal()
-                store.dispatch(.launched)
+                store.dispatch(.adShow(.interstitial, {
+                    store.dispatch(.launched)
+                }))
+            }
+            
+            if store.state.ad.isLoaded(.interstitial), isNeedShowAD {
+                token.unseal()
+                isNeedShowAD = false
+                store.dispatch(.launchDuration(1.0))
             }
         }.seal(in: token)
+        
         /// 1. 在 2s 内快速走完 80% 进度，1s 内走完剩余进度
-        Timer.publish(every: duration, on: .main, in: .common).autoconnect().sink { _ in
+        Timer.publish(every: store.state.launch.minTime, on: .main, in: .common).autoconnect().sink { _ in
             token1.unseal()
-            store.dispatch(.launchDuration(1.0))
+            store.dispatch(.launchDuration(store.state.launch.maxTime))
         }.seal(in: token1)
+        
+        store.dispatch(.adLoad(.interstitial))
+        store.dispatch(.adLoad(.native))
     }
 }
 

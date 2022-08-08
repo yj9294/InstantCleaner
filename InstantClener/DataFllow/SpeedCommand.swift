@@ -90,11 +90,12 @@ struct SpeedStartTestCommand: Command {
         
         Timer.publish(every: 20, on: .main, in: .common).autoconnect().sink { _ in
             timerToken.unseal()
+            maxToken.unseal()
             token.unseal()
             store.dispatch(.speedUpload(0))
             store.dispatch(.speedDownload(0))
             store.dispatch(.speedPing("0"))
-            store.dispatch(.rootAlert("Speed Test Failed"))
+            store.dispatch(.rootAlert("Speed Test Done"))
         }.seal(in: maxToken)
 
 

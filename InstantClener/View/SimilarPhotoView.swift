@@ -197,6 +197,9 @@ struct SimilarPhotoView: View {
         .navigationTitle(point.title)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            viewShow()
+        }
     }
         
     struct ItemView: View {
@@ -242,6 +245,13 @@ struct SimilarPhotoView: View {
 }
 
 extension SimilarPhotoView {
+    func viewShow() {
+        if store.state.loading.pushEvent == .smart {
+            store.dispatch(.adLoad(.interstitial))
+            store.dispatch(.adLoad(.native))
+        }
+    }
+    
     func selectAllAction() {
         store.dispatch(.photoAllSelect(point, true))
     }
