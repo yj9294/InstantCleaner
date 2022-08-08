@@ -2,41 +2,36 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<true/>
+	<key>FacebookAppID</key>
+	<string></string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookClientToken</key>
+	<string>2ff1a0717c9c05d0a1da37cbaff22343</string>
+	<key>FacebookDisplayName</key>
+	<string>InstantCleaner</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3230534400231643~3684592318</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-    <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>fb</string>
-                </array>
-            </dict>
-        </array>
-        <key>FacebookAdvertiserIDCollectionEnabled</key>
-        <true/>
-        <key>FacebookAppID</key>
-        <string></string>
-        <key>FacebookAutoLogAppEventsEnabled</key>
-        <true/>
-        <key>FacebookClientToken</key>
-        <string>2ff1a0717c9c05d0a1da37cbaff22343</string>
-        <key>FacebookDisplayName</key>
-        <string>InstantCleaner</string>
-        <key>GADApplicationIdentifier</key>
-        <string>ca-app-pub-3230534400231643~3684592318</string>
-        <key>LSApplicationQueriesSchemes</key>
-        <array>
-            <string>fbapi</string>
-            <string>fb-messenger-share-api</string>
-        </array>
-        <key>NSAppTransportSecurity</key>
-        <dict>
-            <key>NSAllowsArbitraryLoads</key>
-            <true/>
-        </dict>
 </dict>
 </plist>
