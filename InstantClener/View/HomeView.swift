@@ -41,6 +41,9 @@ struct HomeView: View {
                 }.navigationBarHidden(true)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification), perform: { _ in
+            store.state.animation.scanModel.animationView.play()
+        })
         .navigationTitle("Instant Cleaner")
         .onAppear {
             showView()
