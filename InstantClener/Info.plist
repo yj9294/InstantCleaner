@@ -21,8 +21,6 @@
 	<string>2ff1a0717c9c05d0a1da37cbaff22343</string>
 	<key>FacebookDisplayName</key>
 	<string>InstantCleaner</string>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3230534400231643~3684592318</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

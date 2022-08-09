@@ -108,18 +108,18 @@ struct HomeScanAnimationCommand: Command {
     func execute(in store: Store) {
         let token = SubscriptionToken()
         store.dispatch(.homeDegree(0))
-        Timer.publish(every: 0.01, on: .main, in: .common).autoconnect().sink { _ in
-            var degress = store.state.home.degree
-            degress +=  360.0 / 100.0
-            if degress > Double(Int.max) {
-                token.unseal()
-            } else {
-                store.dispatch(.homeDegree(degress))
-            }
-            if !store.state.home.isScanAnimation {
-                token.unseal()
-            }
-        }.seal(in: token)
+//        Timer.publish(every: 0.01, on: .main, in: .common).autoconnect().sink { _ in
+//            var degress = store.state.home.degree
+//            degress +=  360.0 / 100.0
+//            if degress > Double(Int.max) {
+//                token.unseal()
+//            } else {
+//                store.dispatch(.homeDegree(degress))
+//            }
+//            if !store.state.home.isScanAnimation {
+//                token.unseal()
+//            }
+//        }.seal(in: token)
         
         let token1 = SubscriptionToken()
         store.dispatch(.homeProgress(0))

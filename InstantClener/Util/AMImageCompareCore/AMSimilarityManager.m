@@ -161,6 +161,7 @@ BOOL stopClean = FALSE;
                 }
                 //添加自动释放池，处理临时变量
                 @autoreleasepool {
+                    
                     //获取对比对象
                     PHAsset* challengeObject = inputArray[j];
                     UIImage* chaImage = [AMSimilarityManager syncRequestImage:challengeObject targetSize:PHASHCompareSize];

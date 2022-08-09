@@ -129,7 +129,11 @@ enum Action {
     }
 }
 
-class PhotoItem: NSObject, Identifiable {
+class PhotoItem: NSObject, Identifiable, NSCopying {
+    func copy(with zone: NSZone? = nil) -> Any {
+        return PhotoItem(asset: self.asset, image: self.image, imageDataLength: self.imageDataLength, isSelected: self.isSelected, isBest: self.isBest, second: self.second)
+    }
+    
     var id: String = UUID().uuidString
     /// 图片资源
     @objc var asset: PHAsset?
@@ -161,6 +165,7 @@ class ContactItem: NSObject, Identifiable {
     var imageData: Data?
     var contact: CNContact?
     var isSelected = false
+    var image: UIImage?
     init(name: String? = nil, number: String? = nil, imageData: Data? = nil, contact: CNContact? = nil, isSelected: Bool = false) {
         
         self.name = name ?? "No Name"
@@ -168,6 +173,9 @@ class ContactItem: NSObject, Identifiable {
         self.imageData = imageData
         self.contact = contact
         self.isSelected = isSelected
+        if let imageData = imageData {
+            self.image = UIImage(data: imageData)
+        }
     }
     
     var n: String {

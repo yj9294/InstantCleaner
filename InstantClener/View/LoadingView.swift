@@ -16,7 +16,9 @@ struct LoadingView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
             VStack(spacing: 84){
-                Image("launch_title")
+                LottieView( store.state.animation.loadingModel.animationView).onAppear {
+                    store.state.animation.loadingModel.animationView.play()
+                }.frame(width: 300, height: 300)
                 VStack(spacing: 12) {
                     HStack(alignment: .bottom, spacing: 0){
                         Text("\(Int(store.state.loading.progress * 100))")

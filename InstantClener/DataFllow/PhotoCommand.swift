@@ -94,7 +94,7 @@ struct PhotoFetchCommand: Command {
         default: break
         }
         store.dispatch(.loadingPush)
-        store.dispatch(.logEvent(.scanStart))
+        store.dispatch(.logEvent(.scanSucess))
     }
 }
 

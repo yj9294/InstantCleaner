@@ -32,7 +32,7 @@ struct CalendarCommand: Command {
         }
         
         let array: [CalendarItem] = sortArr.map {
-            CalendarItem(event: $0, date: $0.startDate.format(), title: $0.title ?? "New Event", content: "\($0.calendar.title):\($0.calendar.type == .subscription ? "subscription" : "iCloud")", isSelected: false)
+            CalendarItem(event: $0, date: $0.startDate.format(), title: $0.title ?? "New Event", content: "\($0.calendar.title):\($0.calendar.type == .subscription ? "subscription" : "iCloud")", isSelected: true)
         }
         
         let group = Dictionary(grouping: array) { event in
@@ -118,7 +118,7 @@ struct CalendarDeleteCommand: Command {
             }
         }
         group.notify(queue: .main) {
-            store.dispatch(.rootAlert(selecteArray.count > 1 ? "\(selecteArray.count) event cleaned up successfully" : "1 event cleaned up successfully"))
+            store.dispatch(.rootAlert(selecteArray.count > 1 ? "\(selecteArray.count) events cleaned up successfully" : "1 event cleaned up successfully"))
         }
         
         let result: [[CalendarItem]] = store.state.calendar.calendars.map {

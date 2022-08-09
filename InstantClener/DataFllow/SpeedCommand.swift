@@ -53,7 +53,7 @@ struct SpeedRequestIPCommand: Command {
 
 struct SpeedStartTestCommand: Command {
     func execute(in store: Store) {
-        store.state.speed.testingModel.animationView.play()
+        store.state.animation.testingModel.animationView.play()
         store.state.speed.monitorFlowModel.startMonitor()
         
         let token = SubscriptionToken()
@@ -64,6 +64,8 @@ struct SpeedStartTestCommand: Command {
         
         var uploadArray: [UInt64] = []
         var downloadArray: [UInt64] = []
+        
+        store.dispatch(.speedPing("0"))
         
         Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
             if store.state.speed.status == .normal {
@@ -89,12 +91,10 @@ struct SpeedStartTestCommand: Command {
         }.seal(in: timerToken)
         
         Timer.publish(every: 20, on: .main, in: .common).autoconnect().sink { _ in
-            timerToken.unseal()
+            maxToken.unseal()
             token.unseal()
-            store.dispatch(.speedUpload(0))
-            store.dispatch(.speedDownload(0))
-            store.dispatch(.speedPing("0"))
-            store.dispatch(.rootAlert("Speed Test Failed"))
+            isDownload = true
+            isPing = true
         }.seal(in: maxToken)
 
 
@@ -129,7 +129,7 @@ struct SpeedStartTestCommand: Command {
 
 struct SpeedStopTestCommand: Command {
     func execute(in store: Store) {
-        store.state.speed.testingModel.animationView.stop()
+        store.state.animation.testingModel.animationView.stop()
         store.state.speed.monitorFlowModel.stopMonitor()
     }
 }

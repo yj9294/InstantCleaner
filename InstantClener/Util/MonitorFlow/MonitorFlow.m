@@ -76,6 +76,8 @@
             monitor.wifiReceived = 0;
             monitor.wwanSend = 0;
             monitor.wwanReceived = 0;
+            self.receive = 0;
+            self.send = 0;
         }
             break;
     }

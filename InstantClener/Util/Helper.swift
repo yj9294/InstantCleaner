@@ -353,3 +353,15 @@ extension UIDevice {
        return totalDiskSpaceInBytes - freeDiskSpaceInBytes
     }
 }
+
+extension UInt64 {
+    var format: (String, String) {
+        if self < 1024 * 1024 {
+            return (String(format: "%.1f", Double(self) / 1024.0 ), "KB")
+        } else if self < 1024 * 1024 * 1024 {
+            return (String(format: "%.1f", Double(self) / 1024.0 / 1024.0), "MB")
+        } else {
+            return (String(format: "%.1f", Double(self) / 1024.0 / 1024.0 / 1024.0), "GB")
+        }
+    }
+}
