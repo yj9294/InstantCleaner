@@ -13,6 +13,8 @@ struct HomeView: View {
         ScrollView(showsIndicators: false){
             VStack(alignment:.leading, spacing: 15){
                 TopView()
+                NativeView(model: store.state.root.adModel)
+                    .frame(height: 68)
                 CenterView()
                 BottomView()
             }
@@ -41,6 +43,9 @@ struct HomeView: View {
                 }.navigationBarHidden(true)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification), perform: { _ in
+            store.state.animation.scanModel.animationView.play()
+        })
         .navigationTitle("Instant Cleaner")
         .onAppear {
             showView()
@@ -52,6 +57,9 @@ struct HomeView: View {
     
     struct TopView: View {
         @EnvironmentObject var store: Store
+        var memoryLayoutIsLeading: Bool {
+            store.state.home.radio >= 0.5
+        }
         var body: some View {
             VStack {
                 VStack(alignment:.leading, spacing: 8){
@@ -69,29 +77,34 @@ struct HomeView: View {
                             
                             RoundedCorners(tl: 12, tr: 0, bl: 12, br: 0)
                                 .fill(
-                                    LinearGradient(colors: [Color(hex: 0x225FFF), Color(hex: 0x34E8FF)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                    LinearGradient(colors: [Color(hex: memoryLayoutIsLeading ? 0xFFB233 : 0x225FFF ), Color(hex: memoryLayoutIsLeading ? 0xFF5022 : 0x34E8FF)], startPoint: .topLeading, endPoint: .bottomTrailing)
                                 )
                                 .frame(width: metrics.size.width * store.state.home.progress)
                             
-                            VStack(alignment: .trailing, spacing: 5){
+                            VStack(alignment: memoryLayoutIsLeading ? .leading : .trailing, spacing: 5){
                                 HStack( alignment: .bottom, spacing:0){
-                                    Spacer()
+                                    if !memoryLayoutIsLeading {
+                                        Spacer()
+                                    }
                                     Text("\(Int(store.state.home.progress * 100))")
                                         .font(.largeTitle)
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color(hex: 0x3286FF))
+                                        .foregroundColor(memoryLayoutIsLeading ? .white : Color(hex: 0x3286FF))
                                     Text("%")
-                                        .foregroundColor(Color(hex: 0x3286FF))
+                                        .foregroundColor(memoryLayoutIsLeading ? .white : Color(hex: 0x3286FF))
+                                    if memoryLayoutIsLeading {
+                                        Spacer()
+                                    }
                                 }
                                 Text("used")
                                     .font(.footnote)
-                                    .foregroundColor(Color(hex: 0x3B3B3B))
+                                    .foregroundColor(memoryLayoutIsLeading ? .white : Color(hex: 0x3B3B3B))
                                 Text("\(store.state.home.usedDisk)/\(store.state.home.totalDisk)")
                                     .font(.footnote)
-                                    .foregroundColor(Color(hex: 0x3B3B3B))
+                                    .foregroundColor(memoryLayoutIsLeading ? .white : Color(hex: 0x3B3B3B))
                             }
                             .padding(.vertical, 13)
-                            .padding(.trailing, 16)
+                            .padding(.horizontal, 16)
                         }
                     }
                     .frame(height: 116)
@@ -102,7 +115,11 @@ struct HomeView: View {
                             Text("One-Click Smart Scan")
                                 .foregroundColor(Color.white)
                             Spacer()
-                            Image("home_scan").rotationEffect(.degrees(store.state.home.degree))
+                            LottieView(store.state.animation.scanModel.animationView)
+                                .frame(width: 24, height: 24)
+                                .onAppear {
+                                    store.state.animation.scanModel.animationView.play()
+                                }
                         }
                     }
                     .padding(.vertical, 19)

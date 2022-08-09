@@ -19,7 +19,7 @@ struct SpeedView: View {
         ZStack{
             VStack{
                 ZStack{
-                    LottieView(animationView: store.state.speed.testingModel.animationView)
+                    LottieView(store.state.animation.testingModel.animationView)
                         .frame(height: 180)
                     VStack(alignment: .leading,spacing: 3){
                         HStack{
@@ -91,6 +91,9 @@ struct SpeedView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    store.dispatch(.speedPing("0"))
+                    store.dispatch(.speedUpload(0))
+                    store.dispatch(.speedDownload(0))
                     self.presentationModel.wrappedValue.dismiss()
                 }, label: {
                     Image("arrow_left")
@@ -156,6 +159,9 @@ extension SpeedView {
             store.dispatch(.speedStatus(.testing))
         case .testing:
             store.dispatch(.speedStopTest)
+            store.dispatch(.speedPing("0"))
+            store.dispatch(.speedUpload(0))
+            store.dispatch(.speedDownload(0))
             store.dispatch(.speedStatus(.normal))
         }
     }

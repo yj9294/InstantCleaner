@@ -34,6 +34,7 @@ struct AppState {
     var compression = Compression()
     var firebase = Firebase()
     var ad = AD()
+    var animation = Animation()
 }
 
 extension AppState {
@@ -97,13 +98,15 @@ extension AppState {
         var degree: Double = 0.0
         /// 是否正在扫描动画
         var isScanAnimation: Bool = false
-        /// 硬盘信息
-        var totalDisk: String = UIDevice.current.totalDiskSpaceInGB
+        /// 硬盘信息 
+        var totalDisk: String { UIDevice.current.totalDiskSpaceInGB }
         /// 已使用硬盘
-        var usedDisk: String = UIDevice.current.usedDiskSpaceInGB
+        var usedDisk: String { UIDevice.current.usedDiskSpaceInGB }
         /// 使用比例
         var radio: Double {
-            Double(UIDevice.current.usedDiskSpaceInBytes) / Double(UIDevice.current.totalDiskSpaceInBytes)
+            let total: Double = Double(totalDisk.components(separatedBy: " ").first ?? "0") ?? 0
+            let use: Double = Double(usedDisk.components(separatedBy: " ").first ?? "0") ?? 0
+            return use / total
         }
         /// 进度
         var progress: Double = 0.0
@@ -417,7 +420,6 @@ extension AppState {
         var upload: UInt64 = 0
         var ping: String = "0"
         var status: Status = .normal
-        var testingModel: LottieViewModel = LottieViewModel(name: "testing", loopModel: .loop, animationView: AnimationView())
         var monitorFlowModel = MonitorFlow()
         var test = SpeedTest()
         
@@ -554,6 +556,14 @@ extension AppState {
             }
             return false
         }
+    }
+}
+    
+extension AppState {
+    struct Animation {
+        var testingModel: LottieViewModel = LottieViewModel(name: "testing", loopModel: .loop, animationView: AnimationView())
+        var loadingModel: LottieViewModel = LottieViewModel(name: "loading", loopModel: .loop, animationView: AnimationView())
+        var scanModel: LottieViewModel = LottieViewModel(name: "scan", loopModel: .loop, animationView: AnimationView())
     }
 }
 

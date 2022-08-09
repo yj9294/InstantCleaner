@@ -107,8 +107,8 @@ class ADLoadModel: NSObject {
     
     /// 显示的时间间隔小于 11.2秒
     var isNeedShow: Bool {
-        if Date().timeIntervalSince1970 - impressionDate.timeIntervalSince1970 < 11.2 {
-            debugPrint("[AD] (\(position)) 11.2s 模型填充間隔，包含了广告的展示间隔，和异步加载完成数据的判定。如果出现这个日志不代表用户马上展示该广告位广告，只是表示一个模型的填充。进行判断是为了防止间隔过快的填充，实际加载广告以用户看到数据为准。")
+        if Date().timeIntervalSince1970 - impressionDate.timeIntervalSince1970 < 11 {
+            debugPrint("[AD] (\(position)) 11s 模型填充間隔，包含了广告的展示间隔，和异步加载完成数据的判定。如果出现这个日志不代表用户马上展示该广告位广告，只是表示一个模型的填充。进行判断是为了防止间隔过快的填充，实际加载广告以用户看到数据为准。")
             return false
         }
         return true

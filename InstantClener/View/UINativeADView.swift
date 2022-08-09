@@ -55,7 +55,7 @@ class UINativeAdView: GADNativeAdView {
         label.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
         label.textColor = .white
         label.numberOfLines = 1
-        label.textAlignment = .center
+        label.textAlignment = .left
         return label
     }()
     
@@ -120,8 +120,8 @@ extension UINativeAdView {
         
         addSubview(adView)
         adView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
             make.left.equalTo(titleLabel.snp.right)
+            make.centerY.equalTo(titleLabel)
             make.width.equalTo(21)
             make.height.equalTo(12)
         }
@@ -135,11 +135,10 @@ extension UINativeAdView {
         
         addSubview(installLabel)
         installLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(iconImageView)
-            make.top.equalTo(titleLabel.snp.bottom).offset(6)
+            make.centerY.equalToSuperview()
             make.width.equalTo(77)
             make.height.equalTo(36)
-            make.bottom.equalToSuperview()
+            make.right.equalToSuperview().offset(-12)
         }
         
         

@@ -186,7 +186,18 @@ struct ContactView: View {
         var body: some View {
             VStack{
                 HStack(spacing: 12){
-                    Image("contact_placeholder")
+                    if let image = item.image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 32, height: 32)
+                            .cornerRadius(16)
+                            .clipped()
+                    } else {
+                        Image("contact_placeholder")
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                    }
                     VStack(alignment: .leading, spacing: 5){
                         Text(item.n)
                             .font(.system(size: 15.0))
