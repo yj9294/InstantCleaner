@@ -81,6 +81,7 @@ enum ADPosition: String, CaseIterable {
 }
 
 class ADLoadModel: NSObject {
+    var callback: ((_ isSuccess: Bool) -> Void)? = nil
     /// 當前廣告位置類型
     var position: ADPosition = .native
     /// 當前正在加載第幾個 ADModel
@@ -122,22 +123,28 @@ class ADLoadModel: NSObject {
 
 extension ADLoadModel {
     func beginAddWaterFall(callback: ((_ isSuccess: Bool) -> Void)? = nil, in store: Store) {
+        if self.callback == nil {
+            self.callback = callback
+        }
         if isPreloadingAd == false, loadedArray.count == 0 {
             debugPrint("[AD] (\(position.rawValue) start to prepareLoad.--------------------")
             if let array: [ADModel] = store.state.ad.adConfig?.arrayWith(position), array.count > 0 {
                 preloadIndex = 0
                 debugPrint("[AD] (\(position.rawValue)) start to load array = \(array.count)")
-                prepareLoadAd(array: array, callback: callback, in: store)
+                prepareLoadAd(array: array, callback: self.callback, in: store)
             } else {
               isPreloadingAd = false
                 debugPrint("[AD] (\(position.rawValue)) no configer.")
             }
         } else if loadedArray.count > 0 {
             debugPrint("[AD] (\(position.rawValue)) loaded ad.")
-            callback?(true)
+            self.callback?(true)
+            if self.callback == nil {
+                debugPrint("------------")
+            }
         } else if loadingArray.count > 0 {
             debugPrint("[AD] (\(position.rawValue)) loading ad.")
-            callback?(false)
+            self.callback?(false)
         }
     }
     

@@ -51,7 +51,7 @@ struct SpeedView: View {
                         .padding(.leading, 60)
                 }
                 
-                NativeView(model: store.state.speed.adModel)
+                NativeView(model: store.state.home.adModel)
                     .frame(height: 68)
         
                 Spacer()
@@ -87,18 +87,11 @@ struct SpeedView: View {
             }
         }
         .onAppear(perform: {
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.adLoad(.native, { adModel in
-                store.dispatch(.speedAdModel(adModel))
-            }))
+            store.dispatch(.adLoad(.native))
         })
         .onDisappear(perform: {
             store.dispatch(.speedStopTest)
             store.dispatch(.speedStatus(.normal))
-        })
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { _ in
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.speedAdModel(.None))
         })
         .background(RoundedRectangle(cornerRadius: 0).fill(
             .linearGradient(colors: [Color(hex: 0xE2F3FF), Color(hex: 0xF8FEFF)], startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -110,6 +103,8 @@ struct SpeedView: View {
                     store.dispatch(.speedUpload(0))
                     store.dispatch(.speedDownload(0))
                     self.presentationModel.wrappedValue.dismiss()
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.homeAdModel(.None))
                 }, label: {
                     Image("arrow_left")
                 })

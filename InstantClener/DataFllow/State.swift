@@ -42,6 +42,9 @@ extension AppState {
         var selection: Index = .launch
         /// 进入后台
         var isEnterbackground = false
+        /// 进入过后台
+        var isEnterbackgrounded = false
+
         /// 弹窗
         var isAlert: Bool = false
         /// 弹窗详情
@@ -55,7 +58,9 @@ extension AppState {
 
 extension AppState {
     struct Tabbar {
-        var selection: Index = .home 
+        var selection: Index = .home
+        /// 是否弹出加载界面
+        var isPushLoading: Bool = false
         enum Index {
             case home, clean, setting
         }
@@ -91,8 +96,6 @@ extension AppState {
 
 extension AppState {
     struct Home{
-        /// 扫描动画角度
-        var degree: Double = 0.0
         /// 是否正在扫描动画
         var isScanAnimation: Bool = false
         /// 硬盘信息 
@@ -125,8 +128,6 @@ extension AppState {
 
 extension AppState {
     struct Loading{
-        /// 是否弹出加载界面
-        var isPresent: Bool = false
         /// 加载总时长
         var duration: Double = 0.0
         /// 加载最长时间
@@ -136,16 +137,13 @@ extension AppState {
         ///  加载进度
         var progress: Double = 0.0
         /// 进入result
-        var isPush: Bool = false
+        var isPushEvent: Bool = false
         var pushEvent: AppState.PhotoManagement.Event = .smart
     }
 }
 
 extension AppState {
     struct PhotoManagement{
-        /// 原生广告
-        var adModel: NativeViewModel = .None
-
         /// 删除中
         var deleting: Bool = false
         /// 加载进度
@@ -380,7 +378,6 @@ extension AppState {
         var duplicationNumber: [[ContactItem]] = []
         var noNumber: [[ContactItem]] = []
         var noName: [[ContactItem]] = []
-        var adModel: NativeViewModel = .None
         
         enum Point: String {
             case duplicateName, duplicateNumber, noName, noNumber
@@ -427,7 +424,6 @@ extension AppState {
         var status: Status = .normal
         var monitorFlowModel = MonitorFlow()
         var test = SpeedTest()
-        var adModel: NativeViewModel = .None
         
         enum Status {
             case normal, testing, tested
@@ -450,7 +446,6 @@ extension AppState {
         var images: [UIImage] = []
         var compressionImages: [UIImage] = []
         var size: UInt64 = 0
-        var adModel: NativeViewModel = .None
     }
 }
 

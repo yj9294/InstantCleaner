@@ -94,8 +94,11 @@ struct PermissionCommand: Command {
                         store.dispatch(.loadingEvent(.contact))
                         store.dispatch(.loadingStart)
                         store.dispatch(.contactLoad)
-                        store.dispatch(.loadingPresent(true))
+                        store.dispatch(.tabbarPushLoading(true))
                         store.dispatch(.homeStopScanAnimation)
+                        
+                        store.dispatch(.adDisapear(.native))
+                        store.dispatch(.homeAdModel(.None))
                     }
                 }
             }
@@ -109,8 +112,11 @@ struct PermissionCommand: Command {
                         store.dispatch(.loadingEvent(.calendar))
                         store.dispatch(.loadingStart)
                         store.dispatch(.calendarLoad)
-                        store.dispatch(.loadingPresent(true))
+                        store.dispatch(.tabbarPushLoading(true))
                         store.dispatch(.homeStopScanAnimation)
+                        
+                        store.dispatch(.adDisapear(.native))
+                        store.dispatch(.homeAdModel(.None))
                     }
                 }
             }
@@ -120,8 +126,6 @@ struct PermissionCommand: Command {
 
 struct HomeScanAnimationCommand: Command {
     func execute(in store: Store) {
-        let token = SubscriptionToken()
-        store.dispatch(.homeDegree(0))
 //        Timer.publish(every: 0.01, on: .main, in: .common).autoconnect().sink { _ in
 //            var degress = store.state.home.degree
 //            degress +=  360.0 / 100.0
@@ -167,8 +171,8 @@ struct LoadingCommand: Command {
                 store.dispatch(.loadingProgress(value))
             } else {
                 token.unseal()
-                if !store.state.loading.isPush {
-                    store.dispatch(.loadingPush)
+                if !store.state.loading.isPushEvent {
+                    store.dispatch(.loadingPushEvent(true))
                     store.dispatch(.logEvent(.scanStart))
                     if store.state.loading.pushEvent == .contact {
                         let isNoName = store.state.contact.noName.flatMap {

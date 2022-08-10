@@ -103,7 +103,7 @@ struct SmarkResultView: View {
                 
             }
             /// 广告视图
-            NativeView(model: store.state.photoManagement.adModel)
+            NativeView(model: store.state.home.adModel)
                 .padding(.horizontal, 20)
                 .frame(height: 68)
         }
@@ -113,10 +113,12 @@ struct SmarkResultView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     store.dispatch(.photoStopLoad)
-                    store.dispatch(.loadingPresent(false))
+                    store.dispatch(.loadingPushEvent(false))
                     store.dispatch(.homeStartScanAnimation)
                     store.dispatch(.logEvent(.homeShow))
                     store.dispatch(.logEvent(.homeScan))
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.homeAdModel(.None))
                 }, label: {
                     Image("arrow_left")
                 })
@@ -126,16 +128,8 @@ struct SmarkResultView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.adLoad(.native) { adModel in
-                store.dispatch(.photoAdModel(adModel))
-            })
-            store.dispatch(.photoDisplayLoad(store.state.photoManagement.loadModel))
+            store.dispatch(.adLoad(.native))
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { _ in
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.photoAdModel(.None))
-        })
     }
     
     struct ItemView: View{

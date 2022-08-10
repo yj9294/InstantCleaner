@@ -74,7 +74,7 @@ struct ContactManageView: View {
                     Spacer()
                 }
             }
-            NativeView(model: store.state.contact.adModel)
+            NativeView(model: store.state.home.adModel)
                 .frame(height: 68)
         }
         .padding(.horizontal, 16)
@@ -84,10 +84,12 @@ struct ContactManageView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    store.dispatch(.loadingPresent(false))
+                    store.dispatch(.loadingPushEvent(false))
                     store.dispatch(.homeStartScanAnimation)
                     store.dispatch(.logEvent(.homeShow))
                     store.dispatch(.logEvent(.homeScan))
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.homeAdModel(.None))
                 }, label: {
                     Image("arrow_left")
                 })
@@ -97,16 +99,8 @@ struct ContactManageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            store.dispatch(.contactLoad)
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.adLoad(.native, { adModel in
-                store.dispatch(.contactAdModel(adModel))
-            }))
+            store.dispatch(.adLoad(.native))
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { _ in
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.contactAdModel(.None))
-        })
     }
     
     struct ItemView: View{

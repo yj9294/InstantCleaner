@@ -44,6 +44,11 @@ struct HomeView: View {
             store.dispatch(.adDisapear(.native))
             store.dispatch(.homeAdModel(.None))
         }
+        .onReceive(NotificationCenter.default.publisher(for: .nativeAdLoadCompletion), perform: { ad in
+            if let ad = ad.object as? NativeViewModel, store.state.home.adModel.ad?.nativeAd == nil {
+                store.dispatch(.homeAdModel(ad))
+            }
+        })
         .navigationTitle("Instant Cleaner")
         .onAppear {
             showView()
@@ -107,11 +112,7 @@ struct HomeView: View {
                     }
                     .frame(height: 116)
 
-                    
-                    NavigationLink {
-                        LoadingView()
-                            .navigationBarBackButtonHidden(true)
-                    } label: {
+                    Button(action: smartClean) {
                         HStack{
                             Text("One-Click Smart Scan")
                                 .foregroundColor(Color.white)
@@ -123,9 +124,6 @@ struct HomeView: View {
                                 }
                         }
                     }
-                    .simultaneousGesture(TapGesture().onEnded({ _ in
-                        smartClean()
-                    }))
                     .padding(.vertical, 19)
                     .padding(.horizontal, 16)
                     .background(
@@ -154,31 +152,10 @@ struct HomeView: View {
             }
             LazyVGrid(columns: colums) {
                 ForEach(0..<items.count, id: \.self) { index in
-                    if index == 0 {
-                        /// photo
-                        NavigationLink {
-                            LoadingView()
-                                .navigationBarBackButtonHidden(true)
-                        } label: {
-                            items[index]
-                        }.simultaneousGesture(TapGesture().onEnded({ _ in
-                            photoAction()
-                        }))
-                    } else if index == 1 {
-                        NavigationLink {
-                            LoadingView()
-                                .navigationBarBackButtonHidden(true)
-                        } label: {
-                            items[index]
-                        }.simultaneousGesture(TapGesture().onEnded({ _ in
-                            videoAction()
-                        }))
-                    } else {
-                        Button {
-                            didSelectItem(style: items[index].style)
-                        } label: {
-                            items[index]
-                        }
+                    Button {
+                        didSelectItem(style: items[index].style)
+                    } label: {
+                        items[index]
                     }
                 }
             }.padding(.top, 8)
@@ -271,7 +248,10 @@ struct HomeView: View {
                     SpeedView()
                 } label: {
                     CenterView.Item(style: .speed)
-                }
+                }.simultaneousGesture(TapGesture().onEnded({ _ in
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.homeAdModel(.None))
+                }))
 
                 Spacer()
                 Button(action: compressionAction) {
@@ -290,10 +270,7 @@ extension HomeView {
         store.dispatch(.logEvent(.homeScan))
                 
         store.dispatch(.adLoad(.interstitial))
-        store.dispatch(.adDisapear(.native))
-        store.dispatch(.adLoad(.native) { adModel in
-            store.dispatch(.homeAdModel(adModel))
-        })
+        store.dispatch(.adLoad(.native))
     }
     
     func hideView() {
@@ -306,10 +283,13 @@ extension HomeView.TopView {
     func smartClean() {
         store.dispatch(.loadingEvent(.smart))
         store.dispatch(.photoLoad(.smart))
-        store.dispatch(.loadingPresent(true))
+        store.dispatch(.tabbarPushLoading(true))
         store.dispatch(.homeStopScanAnimation)
         store.dispatch(.logEvent(.homeClickSmart))
         store.dispatch(.logEvent(.scanStart))
+        
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
 }
 
@@ -337,9 +317,11 @@ extension HomeView.CenterView {
         store.dispatch(.loadingEvent(.contact))
         store.dispatch(.loadingStart)
         store.dispatch(.contactLoad)
-        store.dispatch(.loadingPresent(true))
+        store.dispatch(.tabbarPushLoading(true))
         store.dispatch(.homeStopScanAnimation)
         
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
     
     func calendarAction() {
@@ -352,28 +334,37 @@ extension HomeView.CenterView {
         store.dispatch(.loadingEvent(.calendar))
         store.dispatch(.loadingStart)
         store.dispatch(.calendarLoad)
-        store.dispatch(.loadingPresent(true))
+        store.dispatch(.tabbarPushLoading(true))
         store.dispatch(.homeStopScanAnimation)
+        
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
     
     func photoAction() {
 
         store.dispatch(.loadingEvent(.photo))
         store.dispatch(.photoLoad(.photo))
-        store.dispatch(.loadingPresent(true))
+        store.dispatch(.tabbarPushLoading(true))
         store.dispatch(.homeStopScanAnimation)
         store.dispatch(.logEvent(.homePhotoClick))
         store.dispatch(.logEvent(.scanStart))
+        
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
     
     func videoAction() {
 
         store.dispatch(.loadingEvent(.video))
         store.dispatch(.photoLoad(.video))
-        store.dispatch(.loadingPresent(true))
+        store.dispatch(.tabbarPushLoading(true))
         store.dispatch(.homeStopScanAnimation)
         store.dispatch(.logEvent(.homeVideoClick))
         store.dispatch(.logEvent(.scanStart))
+        
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
 }
 
@@ -385,6 +376,9 @@ extension HomeView.BottomView {
         }
         store.dispatch(.homePushEvent(.patch))
         store.dispatch(.presentImagePicker)
+        
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
 
     func compressionAction() {
@@ -394,6 +388,9 @@ extension HomeView.BottomView {
         }
         store.dispatch(.homePushEvent(.compression))
         store.dispatch(.presentImagePicker)
+        
+        store.dispatch(.adDisapear(.native))
+        store.dispatch(.homeAdModel(.None))
     }
 }
 

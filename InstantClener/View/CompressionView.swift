@@ -43,7 +43,7 @@ struct CompressionView: View {
                 .padding(.horizontal, 50)
 
                 VStack{
-                    NativeView(model: store.state.compression.adModel)
+                    NativeView(model: store.state.home.adModel)
                         .frame(height: 68)
                 }
                 .padding(.top, 100)
@@ -81,6 +81,8 @@ struct CompressionView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     self.presentationModel.wrappedValue.dismiss()
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.homeAdModel(.None))
                 }, label: {
                     Image("arrow_left")
                 })
@@ -91,14 +93,7 @@ struct CompressionView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(false)
         .onAppear {
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.adLoad(.native, { adModel in
-                store.dispatch(.compressionAdModel(adModel))
-            }))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-            store.dispatch(.adDisapear(.native))
-            store.dispatch(.compressionAdModel(.None))
+            store.dispatch(.adLoad(.native))
         }
     }
 }

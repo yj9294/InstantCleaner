@@ -82,9 +82,9 @@ extension Store {
             
         case .tabbar(let index):
             appState.tabbar.selection = index
+        case .tabbarPushLoading(let isPush):
+            appState.tabbar.isPushLoading = isPush
             
-        case .homeDegree(let degree):
-            appState.home.degree = degree
         case .homeStartScanAnimation:
             if appState.home.isScanAnimation {
                 break
@@ -119,13 +119,11 @@ extension Store {
             appState.loading.maxTime = maxTime
         case .loadingMinTime(let minTime):
             appState.loading.minTime = minTime
-        case .loadingPresent(let isPresent):
-            appState.loading.isPresent = isPresent
-            if !isPresent {
-                appState.loading.isPush = false
+        case .loadingPushEvent(let isPush):
+            if appState.loading.isPushEvent == isPush {
+                break
             }
-        case .loadingPush:
-            appState.loading.isPush = true
+            appState.loading.isPushEvent = isPush
             
         case .loadingEvent(let event):
             appState.loading.pushEvent = event
@@ -154,8 +152,6 @@ extension Store {
             appCommand = PhotoDidSelectCommand(item)
         case .photoDeleting(let isDelete):
             appState.photoManagement.deleting = isDelete
-        case .photoAdModel(let adModel):
-            appState.photoManagement.adModel = adModel
             
         case .contactLoad:
             appCommand = ContactLoadCommand()
@@ -179,8 +175,6 @@ extension Store {
             appCommand = ContactAllSelectCommand(point)
         case .contactCancel:
             appCommand = ContactCancelSelectCommand()
-        case .contactAdModel(let adModel):
-            appState.contact.adModel = adModel
             
         case .calendarLoad:
             appCommand = CalendarCommand()
@@ -226,9 +220,7 @@ extension Store {
             appCommand = SpeedStartTestCommand()
         case .speedStopTest:
             appCommand = SpeedStopTestCommand()
-        case .speedAdModel(let adModel):
-            appState.speed.adModel = adModel
-            
+        
         case .speedDownload(let download):
             appState.speed.download = download
         case .speedUpload(let upload):
@@ -238,8 +230,6 @@ extension Store {
         case .speedRequestIP:
             appCommand = SpeedRequestIPCommand()
             
-        case .compressionAdModel(let model):
-            appState.compression.adModel = model
             
         case .logProperty(let property, let value):
             appCommand = FirebasePropertyCommand(property, value)

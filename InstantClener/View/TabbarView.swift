@@ -17,10 +17,15 @@ struct TabbarView: View {
         Binding (
             get: { tabbar.selection },
             set: {
+                if $0 != AppState.Tabbar.Index.home {
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.homeAdModel(.None))
+                }
+                
                 if $0 == AppState.Tabbar.Index.clean {
                     store.dispatch(.loadingEvent(.smart))
                     store.dispatch(.photoLoad(.smart))
-                    store.dispatch(.loadingPresent(true))
+                    store.dispatch(.tabbarPushLoading(true))
                     store.dispatch(.homeStopScanAnimation)
                     return
                 }
@@ -67,16 +72,17 @@ struct TabbarView: View {
                 }
             }
             
-//            if store.state.loading.isPresent {
-//                NavigationLink(isActive: $store.state.loading.isPresent) {
-//                    LoadingView()
-//                        .navigationBarHidden(true)
-//                } label: {
-//                    EmptyView()
-//                }
-//            }
-            if store.state.loading.isPush {
-                NavigationLink(isActive: $store.state.loading.isPush) {
+            if store.state.tabbar.isPushLoading {
+                NavigationLink(isActive: $store.state.tabbar.isPushLoading) {
+                    LoadingView()
+                        .navigationBarBackButtonHidden(true)
+                } label: {
+                    EmptyView()
+                }
+            }
+            
+            if store.state.loading.isPushEvent {
+                NavigationLink(isActive: $store.state.loading.isPushEvent) {
                     if store.state.loading.pushEvent == .contact {
                         ContactManageView()
                             .navigationBarHidden(false)

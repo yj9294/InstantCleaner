@@ -11,17 +11,29 @@ struct RootView: View {
     @EnvironmentObject var store: Store
     var body: some View {
         TabView(selection: $store.state.root.selection) {
-            /// 启动页
-            LaunchView()
-                .hiddenTabBar()
-                .tag(AppState.Root.Index.launch)
-            /// 主页
-            NavigationView{
-                TabbarView()
+            if store.state.root.isEnterbackgrounded {
+                /// 启动页
+                LaunchView()
+                    .tag(AppState.Root.Index.launch)
+                /// 主页
+                NavigationView{
+                    TabbarView()
+                }
+                    .tag(AppState.Root.Index.tab)
+                    .preferredColorScheme(.light)
+            } else {
+                /// 启动页
+                LaunchView()
+                    .hiddenTabBar()
+                    .tag(AppState.Root.Index.launch)
+                /// 主页
+                NavigationView{
+                    TabbarView()
+                }
+                    .hiddenTabBar()
+                    .tag(AppState.Root.Index.tab)
+                    .preferredColorScheme(.light)
             }
-                .hiddenTabBar()
-                .tag(AppState.Root.Index.tab)
-                .preferredColorScheme(.light)
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             /// 前台
             store.dispatch(.logEvent(.openHot))
@@ -32,6 +44,7 @@ struct RootView: View {
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
             /// 后台
             store.dispatch(.rootBackgrund(true))
+            store.state.root.isEnterbackgrounded = true
         }
     }
 }

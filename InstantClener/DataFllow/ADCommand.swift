@@ -126,6 +126,9 @@ struct ADLoadCommand: Command {
             // 插屏直接一步加载
             if position.isInterstitialAd {
                 ad.beginAddWaterFall(in: store)
+                ad.beginAddWaterFall(callback: { _ in
+                
+                }, in: store)
             } else if position.isNativeAD{
                 // 原生广告需要同步显示
                 ad.beginAddWaterFall(callback: { isSuccess in
@@ -210,9 +213,13 @@ struct ADShowCommand: Command {
                 // 10秒间隔
                 
                 if loadAD?.isNeedShow == true {
-                    completion?(NativeViewModel(ad:ad, view: UINativeAdView()))
+                    let adViewModel = NativeViewModel(ad:ad, view: UINativeAdView())
+                    completion?(adViewModel)
+                    /// 异步加载 回调是nil的情况使用通知
+                    NotificationCenter.default.post(name: .nativeAdLoadCompletion, object: adViewModel)
                 } else {
-                    completion?(.None)
+                    let adViewModel: NativeViewModel = .None
+                    completion?(adViewModel)
                 }
             } else {
                 /// 预加载回来数据 当时已经有显示数据了 并且没超过限制
@@ -312,3 +319,6 @@ struct ADDisapearCommand: Command {
     }
 }
 
+extension Notification.Name {
+    static let nativeAdLoadCompletion = Notification.Name(rawValue: "nativeAdLoadCompletion")
+}

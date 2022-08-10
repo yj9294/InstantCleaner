@@ -43,10 +43,11 @@ enum Action {
     // MARK: Tab
     /// 选中某个tab item
     case tabbar(AppState.Tabbar.Index)
-    
+    /// 是否进入loading 界面
+    case tabbarPushLoading(Bool)
+
     // MARK: home
     /// 扫描动画
-    case homeDegree(Double)
     case homeStartScanAnimation
     case homeStopScanAnimation
     case homeProgress(Double)
@@ -59,8 +60,7 @@ enum Action {
     case loadingMaxTime(Double)
     case loadingMinTime(Double)
     case loadingProgress(Double)
-    case loadingPresent(Bool)
-    case loadingPush
+    case loadingPushEvent(Bool)
     case loadingEvent(AppState.PhotoManagement.Event)
     // MARK: PhotoManagement
     case photoLoad(AppState.PhotoManagement.Event)
@@ -75,7 +75,6 @@ enum Action {
     case photoCancel(AppState.PhotoManagement.Point)
     case photoDidselect(PhotoItem)
     case photoDeleting(Bool)
-    case photoAdModel(NativeViewModel)
     // MARK: Contack
     case contactLoad
     case contactStore([ContactItem])
@@ -88,7 +87,6 @@ enum Action {
     case contactDelete
     case contactAllSelect(AppState.Contact.Point)
     case contactCancel
-    case contactAdModel(NativeViewModel)
     // MARK: Calendar
     case calendarLoad
     case calendarStore([[CalendarItem]])
@@ -108,7 +106,6 @@ enum Action {
     case compressionImages([UIImage])
     case compressionSize(UInt64)
     case compressStore
-    case compressionAdModel(NativeViewModel)
     // MARK: Speed
     case speedStatus(AppState.Speed.Status)
     case speedStartTest
@@ -119,7 +116,6 @@ enum Action {
     case speedUpload(UInt64)
     case speedPing(String)
     case speedRequestIP
-    case speedAdModel(NativeViewModel)
     
     case logEvent(AppState.Firebase.FirebaseEvent,[String:String]? = nil)
     case logProperty(AppState.Firebase.FirebaseProperty, String? = nil)
@@ -143,7 +139,7 @@ enum Action {
     /// 是否开启日志
     var isLog: Bool {
         switch self {
-        case .launchProgress(_), .homeDegree(_), .homeProgress(_), .loadingProgress(_) :
+        case .launchProgress(_), .homeProgress(_), .loadingProgress(_) :
             return false
         default:
             return true

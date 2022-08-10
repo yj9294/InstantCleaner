@@ -38,13 +38,19 @@ struct PhotoFetchCommand: Command {
         
         if let load = store.state.photoManagement.loadModel {
             load.load(event) { progress in
-                store.dispatch(.loadingProgress(Double(progress) / 100.0))
+                if !store.state.loading.isPushEvent {
+                    /// 已经离开了loading界面 就不需要更新loading进度了
+                    store.dispatch(.loadingProgress(Double(progress) / 100.0))
+                }
                 if  progress == 100 {
                     if start == false {
                         // 2s内完成
                         maxToken.unseal()
                         minToken.unseal()
-                        store.dispatch(.loadingProgress(0.99))
+                        if !store.state.loading.isPushEvent {
+                            /// 已经离开了loading界面 就不需要更新loading进度了
+                            store.dispatch(.loadingProgress(0.99))
+                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             completion(in: store)
                         }
@@ -93,7 +99,7 @@ struct PhotoFetchCommand: Command {
             store.dispatch(.logEvent(.videoLoadSuccess, ["once": "\(ceil(time))", "result": string]))
         default: break
         }
-        store.dispatch(.loadingPush)
+        store.dispatch(.loadingPushEvent(true))
         store.dispatch(.logEvent(.scanSucess))
     }
 }
