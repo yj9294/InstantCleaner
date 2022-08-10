@@ -66,6 +66,31 @@ struct TabbarView: View {
                     EmptyView()
                 }
             }
+            
+//            if store.state.loading.isPresent {
+//                NavigationLink(isActive: $store.state.loading.isPresent) {
+//                    LoadingView()
+//                        .navigationBarHidden(true)
+//                } label: {
+//                    EmptyView()
+//                }
+//            }
+            if store.state.loading.isPush {
+                NavigationLink(isActive: $store.state.loading.isPush) {
+                    if store.state.loading.pushEvent == .contact {
+                        ContactManageView()
+                            .navigationBarHidden(false)
+                    } else if store.state.loading.pushEvent == .calendar {
+                        CalendarView()
+                            .navigationBarHidden(false)
+                    } else {
+                        SmarkResultView(event: store.state.loading.pushEvent)
+                            .navigationBarHidden(false)
+                    }
+                } label: {
+                    EmptyView()
+                }
+            }
 
             
             if store.state.permission.alert == nil {

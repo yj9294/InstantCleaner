@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import ASCollectionView_SwiftUI
 import Photos
 
 struct SimilarPhotoView: View {
@@ -246,10 +245,6 @@ struct SimilarPhotoView: View {
 
 extension SimilarPhotoView {
     func viewShow() {
-        if store.state.loading.pushEvent == .smart {
-            store.dispatch(.adLoad(.interstitial))
-            store.dispatch(.adLoad(.native))
-        }
     }
     
     func selectAllAction() {

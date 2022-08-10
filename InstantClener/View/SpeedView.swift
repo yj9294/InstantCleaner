@@ -39,16 +39,21 @@ struct SpeedView: View {
                 .padding(.top, 16)
                 .frame(height: 212)
                 
+                ScrollView (showsIndicators: false){
+                    ItemView(style:.download, speed: speed.download.format.0, speedUnit: speed.download.format.1 + "ps")
+                    Divider()
+                        .padding(.leading, 60)
+                    ItemView(style:.upload, speed: speed.upload.format.0, speedUnit: speed.upload.format.1 + "ps")
+                    Divider()
+                        .padding(.leading, 60)
+                    ItemView(style:.ping, speed: speed.ping, speedUnit: "ms")
+                    Divider()
+                        .padding(.leading, 60)
+                }
                 
-                ItemView(style:.download, speed: speed.download.format.0, speedUnit: speed.download.format.1 + "ps")
-                Divider()
-                    .padding(.leading, 60)
-                ItemView(style:.upload, speed: speed.upload.format.0, speedUnit: speed.upload.format.1 + "ps")
-                Divider()
-                    .padding(.leading, 60)
-                ItemView(style:.ping, speed: speed.ping, speedUnit: "ms")
-                Divider()
-                    .padding(.leading, 60)
+                NativeView(model: store.state.speed.adModel)
+                    .frame(height: 68)
+        
                 Spacer()
                 // 按钮
                 Button {
@@ -81,9 +86,19 @@ struct SpeedView: View {
                     }
             }
         }
+        .onAppear(perform: {
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.adLoad(.native, { adModel in
+                store.dispatch(.speedAdModel(adModel))
+            }))
+        })
         .onDisappear(perform: {
             store.dispatch(.speedStopTest)
             store.dispatch(.speedStatus(.normal))
+        })
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { _ in
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.speedAdModel(.None))
         })
         .background(RoundedRectangle(cornerRadius: 0).fill(
             .linearGradient(colors: [Color(hex: 0xE2F3FF), Color(hex: 0xF8FEFF)], startPoint: .topLeading, endPoint: .bottomTrailing)

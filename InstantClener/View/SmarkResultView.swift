@@ -54,52 +54,60 @@ struct SmarkResultView: View {
     }
     
     var body: some View {
-        
-        ScrollView(showsIndicators: false){
-            VStack{
-                // 头部视图
-                HStack{
-                    Image(icon)
-                    VStack(alignment: .leading, spacing: 5){
-                        Text("Phone Storage used")
-                            .font(.footnote)
-                            .foregroundColor(Color(hex: 0xffffff, alpha: 0.5))
-                        HStack(alignment: .bottom){
-                            Text(disk.format.0)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.white)
-                            Text(disk.format.1)
-                                .foregroundColor(Color.white)
-                                .padding(.bottom, 5)
+        VStack(spacing: 30) {
+            /// 滚动视图
+            ScrollView(showsIndicators: false){
+                VStack{
+                    // 头部视图
+                    HStack{
+                        Image(icon)
+                        VStack(alignment: .leading, spacing: 5){
+                            Text("Phone Storage used")
+                                .font(.footnote)
+                                .foregroundColor(Color(hex: 0xffffff, alpha: 0.5))
+                            HStack(alignment: .bottom){
+                                Text(disk.format.0)
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.white)
+                                Text(disk.format.1)
+                                    .foregroundColor(Color.white)
+                                    .padding(.bottom, 5)
+                            }
+                        }
+                        Spacer()
+                    }
+                    .frame(height: 132)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(
+                                LinearGradient(colors: [Color(hex: 0x2088FF), Color(hex: 0x7A40FD)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            )
+                    )
+                    
+                    /// 列表视图
+                    LazyVGrid(columns: [GridItem(.flexible())]){
+                        ForEach(0..<items.count, id: \.self) { index in
+                            NavigationLink {
+                                SimilarPhotoView(point: items[index].point)
+                                    .navigationBarHidden(false)
+                            } label: {
+                                items[index]
+                            }
+                            
                         }
                     }
-                    Spacer()
                 }
-                .frame(height: 132)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(
-                            LinearGradient(colors: [Color(hex: 0x2088FF), Color(hex: 0x7A40FD)], startPoint: .topLeading, endPoint: .bottomTrailing)
-                        )
-                )
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
                 
-                /// 列表视图
-                LazyVGrid(columns: [GridItem(.flexible())]){
-                                        ForEach(0..<items.count, id: \.self) { index in
-                                            NavigationLink {
-                                                SimilarPhotoView(point: items[index].point)
-                                                    .navigationBarHidden(false)
-                                            } label: {
-                                                items[index]
-                                            }
-                                        }
-                                    }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            
+            /// 广告视图
+            NativeView(model: store.state.photoManagement.adModel)
+                .padding(.horizontal, 20)
+                .frame(height: 68)
         }
+        .padding(.bottom, 8)
         .background(Color(hex: 0xE2F3FF).ignoresSafeArea())
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -118,8 +126,16 @@ struct SmarkResultView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.adLoad(.native) { adModel in
+                store.dispatch(.photoAdModel(adModel))
+            })
             store.dispatch(.photoDisplayLoad(store.state.photoManagement.loadModel))
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { _ in
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.photoAdModel(.None))
+        })
     }
     
     struct ItemView: View{

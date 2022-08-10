@@ -32,7 +32,7 @@ struct FirebasePropertyCommand: Command {
         }
 #if DEBUG
 #else
-        Analytics.setUserProperty(value, forName: name.rawValue)
+        Analytics.setUserProperty(value, forName: property.rawValue)
 #endif
         debugPrint("[ANA] [Property] \(property.rawValue) \(value ?? "")")
     }
@@ -56,7 +56,7 @@ struct FirebaseEvnetCommand: Command {
         
         #if DEBUG
         #else
-        Analytics.logEvent(name.rawValue, parameters: params)
+        Analytics.logEvent(event.rawValue, parameters: params)
         #endif
         
         debugPrint("[ANA] [Event] \(event.rawValue) \(params ?? [:])")

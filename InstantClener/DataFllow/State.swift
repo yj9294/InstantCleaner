@@ -47,9 +47,6 @@ extension AppState {
         /// 弹窗详情
         var alertMessage: String = "Unknow."
     
-        /// 原生广告
-        var adModel: NativeViewModel = .None
-
         enum Index {
             case launch, tab
         }
@@ -104,9 +101,9 @@ extension AppState {
         var usedDisk: String { UIDevice.current.usedDiskSpaceInGB }
         /// 使用比例
         var radio: Double {
-            let total: Double = Double(totalDisk.components(separatedBy: " ").first ?? "0") ?? 0
-            let use: Double = Double(usedDisk.components(separatedBy: " ").first ?? "0") ?? 0
-            return use / total
+            let use = UIDevice.current.usedDiskSpaceInBytes
+            let total = UIDevice.current.totalDiskSpaceInBytes
+             return Double(use) / Double(total)
         }
         /// 进度
         var progress: Double = 0.0
@@ -119,6 +116,10 @@ extension AppState {
         var isPushView = false
         /// 当前是进入patch还是进入的是compression
         var pushEvent: AppState.PhotoManagement.Event = .photo
+        
+        /// 原生广告
+        var adModel: NativeViewModel = .None
+
     }
 }
 
@@ -129,7 +130,7 @@ extension AppState {
         /// 加载总时长
         var duration: Double = 0.0
         /// 加载最长时间
-        var maxTime: Double = 50.0
+        var maxTime: Double = 5.0
         /// 加载最短时间
         var minTime: Double = 2.0
         ///  加载进度
@@ -142,6 +143,9 @@ extension AppState {
 
 extension AppState {
     struct PhotoManagement{
+        /// 原生广告
+        var adModel: NativeViewModel = .None
+
         /// 删除中
         var deleting: Bool = false
         /// 加载进度
@@ -376,6 +380,7 @@ extension AppState {
         var duplicationNumber: [[ContactItem]] = []
         var noNumber: [[ContactItem]] = []
         var noName: [[ContactItem]] = []
+        var adModel: NativeViewModel = .None
         
         enum Point: String {
             case duplicateName, duplicateNumber, noName, noNumber
@@ -422,6 +427,7 @@ extension AppState {
         var status: Status = .normal
         var monitorFlowModel = MonitorFlow()
         var test = SpeedTest()
+        var adModel: NativeViewModel = .None
         
         enum Status {
             case normal, testing, tested
@@ -444,6 +450,7 @@ extension AppState {
         var images: [UIImage] = []
         var compressionImages: [UIImage] = []
         var size: UInt64 = 0
+        var adModel: NativeViewModel = .None
     }
 }
 

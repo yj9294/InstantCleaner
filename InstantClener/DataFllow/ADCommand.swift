@@ -109,10 +109,13 @@ struct ADCacheTimeoutCommand: Command {
 
 struct ADLoadCommand: Command {
     
-    var position: ADPosition = .all
+    let position: ADPosition
     
-    init(_ position: ADPosition) {
+    var completion: ((NativeViewModel)->Void)? = nil
+    
+    init(_ position: ADPosition, _ completion: ((NativeViewModel)->Void)? = nil) {
         self.position = position
+        self.completion = completion
     }
     
     func execute(in store: Store) {
@@ -127,7 +130,7 @@ struct ADLoadCommand: Command {
                 // 原生广告需要同步显示
                 ad.beginAddWaterFall(callback: { isSuccess in
                     if isSuccess {
-                        store.dispatch(.adShow(self.position){})
+                        store.dispatch(.adShow(self.position,completion))
                     }
                 }, in: store)
             }
@@ -137,9 +140,9 @@ struct ADLoadCommand: Command {
 
 struct ADShowCommand: Command {
     let position: ADPosition
-    let completion: ()->Void
+    var completion: ((NativeViewModel)->Void)? = nil
     
-    init(_ position: ADPosition, _ completion: @escaping ()->Void) {
+    init(_ position: ADPosition, _ completion: ((NativeViewModel)->Void)? = nil) {
         self.position = position
         self.completion = completion
     }
@@ -174,7 +177,7 @@ struct ADShowCommand: Command {
                 }
                 ad.closeHandler = {
                     store.dispatch(.adDisapear(position))
-                    completion()
+                    completion?(.None)
                 }
                 ad.clickTwiceHandler = {
                     store.dispatch(.adClean(.all))
@@ -184,7 +187,7 @@ struct ADShowCommand: Command {
                 }
                 ad.present()
             } else {
-                completion()
+                completion?(.None)
             }
             
         case .native:
@@ -205,15 +208,18 @@ struct ADShowCommand: Command {
                     store.dispatch(.adIncreaseClickTimes)
                 }
                 // 10秒间隔
+                
                 if loadAD?.isNeedShow == true {
-                    store.dispatch(.updateADNativeModel(NativeViewModel(ad:ad, view: UINativeAdView())))
+                    completion?(NativeViewModel(ad:ad, view: UINativeAdView()))
+                } else {
+                    completion?(.None)
                 }
             } else {
                 /// 预加载回来数据 当时已经有显示数据了 并且没超过限制
                 if loadAD?.isDisplay == true, !store.state.ad.isLimited(in: store) {
                     return
                 }
-                store.dispatch(.updateADNativeModel(.None))
+                completion?(.None)
             }
         default:
             break
@@ -302,7 +308,7 @@ struct ADDisapearCommand: Command {
                 $0.position == position
             }.first?.closeDisplay()
         }
-        store.dispatch(.updateADNativeModel(.None))
+        store.dispatch(.homeAdModel(.None))
     }
 }
 

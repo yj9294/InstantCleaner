@@ -42,6 +42,14 @@ struct CompressionView: View {
                 .padding(.top, 16)
                 .padding(.horizontal, 50)
 
+                VStack{
+                    NativeView(model: store.state.compression.adModel)
+                        .frame(height: 68)
+                }
+                .padding(.top, 100)
+                .padding(.horizontal, 20)
+
+                
                 Spacer()
                 // 按钮
                 Button {
@@ -82,6 +90,16 @@ struct CompressionView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(false)
+        .onAppear {
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.adLoad(.native, { adModel in
+                store.dispatch(.compressionAdModel(adModel))
+            }))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.compressionAdModel(.None))
+        }
     }
 }
 

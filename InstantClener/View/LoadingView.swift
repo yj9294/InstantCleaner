@@ -35,20 +35,6 @@ struct LoadingView: View {
                         .foregroundColor(Color(hex: 0x232936))
                 }
             }
-            NavigationLink(isActive: $store.state.loading.isPush) {
-                if store.state.loading.pushEvent == .contact {
-                    ContactManageView()
-                        .navigationBarHidden(false)
-                } else if store.state.loading.pushEvent == .calendar {
-                    CalendarView()
-                        .navigationBarHidden(false)
-                } else {
-                    SmarkResultView(event: store.state.loading.pushEvent)
-                        .navigationBarHidden(false)
-                }
-            } label: {
-                EmptyView()
-            }
         }
         .onAppear {
             viewShow()

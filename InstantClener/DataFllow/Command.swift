@@ -44,13 +44,12 @@ struct LaunchCommand: Command {
                 store.dispatch(.launchProgress(value))
             } else {
                 token.unseal()
-                store.dispatch(.adShow(.interstitial, {
+                store.dispatch(.adShow(.interstitial, { _ in
                     store.dispatch(.launched)
                 }))
             }
             
             if store.state.ad.isLoaded(.interstitial), isNeedShowAD {
-                token.unseal()
                 isNeedShowAD = false
                 store.dispatch(.launchDuration(1.0))
             }
@@ -59,6 +58,7 @@ struct LaunchCommand: Command {
         /// 1. 在 2s 内快速走完 80% 进度，1s 内走完剩余进度
         Timer.publish(every: store.state.launch.minTime, on: .main, in: .common).autoconnect().sink { _ in
             token1.unseal()
+            isNeedShowAD = true
             store.dispatch(.launchDuration(store.state.launch.maxTime))
         }.seal(in: token1)
         
@@ -105,6 +105,7 @@ struct PermissionCommand: Command {
                 DispatchQueue.main.async {
                     store.dispatch(.permissionCalendar(EKEventStore.authorizationStatus(for: .event)))
                     if granted{
+
                         store.dispatch(.loadingEvent(.calendar))
                         store.dispatch(.loadingStart)
                         store.dispatch(.calendarLoad)

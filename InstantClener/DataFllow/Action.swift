@@ -75,6 +75,7 @@ enum Action {
     case photoCancel(AppState.PhotoManagement.Point)
     case photoDidselect(PhotoItem)
     case photoDeleting(Bool)
+    case photoAdModel(NativeViewModel)
     // MARK: Contack
     case contactLoad
     case contactStore([ContactItem])
@@ -87,6 +88,7 @@ enum Action {
     case contactDelete
     case contactAllSelect(AppState.Contact.Point)
     case contactCancel
+    case contactAdModel(NativeViewModel)
     // MARK: Calendar
     case calendarLoad
     case calendarStore([[CalendarItem]])
@@ -106,6 +108,7 @@ enum Action {
     case compressionImages([UIImage])
     case compressionSize(UInt64)
     case compressStore
+    case compressionAdModel(NativeViewModel)
     // MARK: Speed
     case speedStatus(AppState.Speed.Status)
     case speedStartTest
@@ -116,6 +119,7 @@ enum Action {
     case speedUpload(UInt64)
     case speedPing(String)
     case speedRequestIP
+    case speedAdModel(NativeViewModel)
     
     case logEvent(AppState.Firebase.FirebaseEvent,[String:String]? = nil)
     case logProperty(AppState.Firebase.FirebaseProperty, String? = nil)
@@ -126,15 +130,15 @@ enum Action {
     case adIncreaseShowTimes
     case adCanShowADmobDate(Date?)
     
-    case adLoad(ADPosition)
-    case adShow(ADPosition, ()->Void)
+    case adLoad(ADPosition, ((NativeViewModel)->Void)? = nil)
+    case adShow(ADPosition, ((NativeViewModel)->Void)? = nil)
     case adDisplay(ADPosition)
     case adDisapear(ADPosition)
     case adClean(ADPosition)
     case adUpdateImpressionDate(ADPosition)
     case adCacheTimeout
     case adDismiss
-    case updateADNativeModel(NativeViewModel)
+    case homeAdModel(NativeViewModel)
     
     /// 是否开启日志
     var isLog: Bool {

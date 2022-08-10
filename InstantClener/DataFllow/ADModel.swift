@@ -133,8 +133,11 @@ extension ADLoadModel {
                 debugPrint("[AD] (\(position.rawValue)) no configer.")
             }
         } else if loadedArray.count > 0 {
-            debugPrint("[AD] (\(position.rawValue)) loading or loaded ad.")
-            callback?(loadedArray.count != 0)
+            debugPrint("[AD] (\(position.rawValue)) loaded ad.")
+            callback?(true)
+        } else if loadingArray.count > 0 {
+            debugPrint("[AD] (\(position.rawValue)) loading ad.")
+            callback?(false)
         }
     }
     

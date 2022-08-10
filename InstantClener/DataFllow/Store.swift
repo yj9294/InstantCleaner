@@ -154,6 +154,8 @@ extension Store {
             appCommand = PhotoDidSelectCommand(item)
         case .photoDeleting(let isDelete):
             appState.photoManagement.deleting = isDelete
+        case .photoAdModel(let adModel):
+            appState.photoManagement.adModel = adModel
             
         case .contactLoad:
             appCommand = ContactLoadCommand()
@@ -177,6 +179,8 @@ extension Store {
             appCommand = ContactAllSelectCommand(point)
         case .contactCancel:
             appCommand = ContactCancelSelectCommand()
+        case .contactAdModel(let adModel):
+            appState.contact.adModel = adModel
             
         case .calendarLoad:
             appCommand = CalendarCommand()
@@ -222,6 +226,8 @@ extension Store {
             appCommand = SpeedStartTestCommand()
         case .speedStopTest:
             appCommand = SpeedStopTestCommand()
+        case .speedAdModel(let adModel):
+            appState.speed.adModel = adModel
             
         case .speedDownload(let download):
             appState.speed.download = download
@@ -231,6 +237,9 @@ extension Store {
             appState.speed.ping = ping
         case .speedRequestIP:
             appCommand = SpeedRequestIPCommand()
+            
+        case .compressionAdModel(let model):
+            appState.compression.adModel = model
             
         case .logProperty(let property, let value):
             appCommand = FirebasePropertyCommand(property, value)
@@ -247,8 +256,8 @@ extension Store {
             appCommand = ADIncreaseTimesCommand(.click)
         case .adCanShowADmobDate(let date):
             appState.ad.isUserCanShowAdmobDate = date
-        case .adLoad(let position):
-            appCommand = ADLoadCommand(position)
+        case .adLoad(let position, let completion):
+            appCommand = ADLoadCommand(position, completion)
         case .adShow(let position, let compeltion):
             appCommand = ADShowCommand(position, compeltion)
         case .adDisplay(let position):
@@ -265,8 +274,8 @@ extension Store {
             appState.ad.ads.filter {
                 $0.position == position
             }.first?.impressionDate = Date()
-        case .updateADNativeModel(let model):
-            appState.root.adModel = model
+        case .homeAdModel(let model):
+            appState.home.adModel = model
         }
         return (appState, appCommand)
     }
