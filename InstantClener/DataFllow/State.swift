@@ -99,9 +99,9 @@ extension AppState {
         var usedDisk: String { UIDevice.current.usedDiskSpaceInGB }
         /// 使用比例
         var radio: Double {
-            let total: Double = Double(totalDisk.components(separatedBy: " ").first ?? "0") ?? 0
-            let use: Double = Double(usedDisk.components(separatedBy: " ").first ?? "0") ?? 0
-            return use / total
+            let use = UIDevice.current.usedDiskSpaceInBytes
+            let total = UIDevice.current.totalDiskSpaceInBytes
+             return Double(use) / Double(total)
         }
         /// 进度
         var progress: Double = 0.0

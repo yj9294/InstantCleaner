@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import ASCollectionView_SwiftUI
 import Photos
 
 struct SimilarPhotoView: View {
