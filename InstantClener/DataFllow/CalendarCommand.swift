@@ -118,7 +118,10 @@ struct CalendarDeleteCommand: Command {
             }
         }
         group.notify(queue: .main) {
-            store.dispatch(.rootAlert(selecteArray.count > 1 ? "\(selecteArray.count) events cleaned up successfully" : "1 event cleaned up successfully"))
+            store.dispatch(.adLoad(.interstitial))
+            store.dispatch(.adShow(.interstitial, { _ in
+                store.dispatch(.rootAlert(selecteArray.count > 1 ? "\(selecteArray.count) events cleaned up successfully" : "1 event cleaned up successfully"))
+            }))
         }
         
         let result: [[CalendarItem]] = store.state.calendar.calendars.map {

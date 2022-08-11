@@ -84,19 +84,16 @@ struct PatchView: View {
                 .padding(.vertical, 14)
             }
             
-            if store.state.root.isAlert {
-                AlertView(message: store.state.root.alertMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.state.root.isAlert = false
-                        }
-                    }
-            }
         }
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    self.presentationModel.wrappedValue.dismiss()
+                    
+                    store.state.home.isPushView = false
+                    
+                    store.dispatch(.adDisapear(.native))
+                    store.dispatch(.adLoad(.native))
+                    store.dispatch(.adLoad(.interstitial))
                 }, label: {
                     Image("arrow_left")
                 })

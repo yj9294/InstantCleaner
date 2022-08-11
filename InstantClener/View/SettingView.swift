@@ -32,7 +32,6 @@ struct SettingView: View {
         }
         .padding(.horizontal, 24)
         .padding(.top, 8)
-        .navigationTitle("Instant Cleaner")
         .background(
             RoundedRectangle(cornerRadius: 0)
                 .fill(.linearGradient(colors: [Color(hex: 0xE2F3FF), Color(hex: 0xF8FEFF)], startPoint: .topLeading, endPoint: .bottomTrailing))

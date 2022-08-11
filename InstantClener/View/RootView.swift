@@ -10,32 +10,40 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject var store: Store
     var body: some View {
-        TabView(selection: $store.state.root.selection) {
-            if store.state.root.isEnterbackgrounded {
-                /// 启动页
-                LaunchView()
-                    .tag(AppState.Root.Index.launch)
-                /// 主页
-                NavigationView{
-                    TabbarView()
+        ZStack{
+            TabView(selection: $store.state.root.selection) {
+                if store.state.root.isEnterbackgrounded {
+                    /// 启动页
+                    LaunchView()
+                        .tag(AppState.Root.Index.launch)
+                    /// 主页
+                    NavigationView{
+                        TabbarView()
+                    }
+                        .tag(AppState.Root.Index.tab)
+                        .preferredColorScheme(.light)
+                } else {
+                    /// 启动页
+                    LaunchView()
+                        .hiddenTabBar()
+                        .tag(AppState.Root.Index.launch)
+                    /// 主页
+                    NavigationView{
+                        TabbarView()
+                    }
+                        .hiddenTabBar()
+                        .tag(AppState.Root.Index.tab)
+                        .preferredColorScheme(.light)
                 }
-                    .tag(AppState.Root.Index.tab)
-                    .preferredColorScheme(.light)
-            } else {
-                /// 启动页
-                LaunchView()
-                    .hiddenTabBar()
-                    .tag(AppState.Root.Index.launch)
-                /// 主页
-                NavigationView{
-                    TabbarView()
-                }
-                    .hiddenTabBar()
-                    .tag(AppState.Root.Index.tab)
-                    .preferredColorScheme(.light)
             }
-        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            
+            if store.state.root.isDelete {
+                DeleteView()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             /// 前台
+            store.dispatch(.adDismiss)
             store.dispatch(.logEvent(.openHot))
             store.dispatch(.rootBackgrund(false))
             store.dispatch(.launchBegin)
@@ -45,6 +53,13 @@ struct RootView: View {
             /// 后台
             store.dispatch(.rootBackgrund(true))
             store.state.root.isEnterbackgrounded = true
+            store.dispatch(.adDisapear(.native))
+            store.dispatch(.adDismiss)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .nativeAdLoadCompletion), perform: { ad in
+            if let ad = ad.object as? NativeViewModel {
+                store.dispatch(.homeAdModel(ad))
+            }
+        })
     }
 }

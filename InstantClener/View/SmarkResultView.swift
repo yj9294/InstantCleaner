@@ -88,13 +88,14 @@ struct SmarkResultView: View {
                     /// 列表视图
                     LazyVGrid(columns: [GridItem(.flexible())]){
                         ForEach(0..<items.count, id: \.self) { index in
-                            NavigationLink {
-                                SimilarPhotoView(point: items[index].point)
-                                    .navigationBarHidden(false)
+                            Button {
+                                store.dispatch(.adDisapear(.native))
+                                
+                                store.dispatch(.photoPush)
+                                store.dispatch(.photoPushSubView(items[index].point))
                             } label: {
                                 items[index]
                             }
-                            
                         }
                     }
                 }
@@ -112,13 +113,21 @@ struct SmarkResultView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    store.dispatch(.photoStopLoad)
-                    store.dispatch(.loadingPushEvent(false))
-                    store.dispatch(.homeStartScanAnimation)
-                    store.dispatch(.logEvent(.homeShow))
-                    store.dispatch(.logEvent(.homeScan))
-                    store.dispatch(.adDisapear(.native))
-                    store.dispatch(.homeAdModel(.None))
+                    if store.state.photoManagement.push {
+                        store.state.photoManagement.push = false
+                        store.dispatch(.adLoad(.native))
+                    } else {
+                        store.dispatch(.photoStopLoad)
+                        store.dispatch(.loadingPushEvent(false))
+                        store.dispatch(.homeStartScanAnimation)
+                        store.dispatch(.logEvent(.homeShow))
+                        store.dispatch(.logEvent(.homeScan))
+                       
+                        store.dispatch(.adDisapear(.native))
+                        
+                        store.dispatch(.adLoad(.native))
+                        store.dispatch(.adLoad(.interstitial))
+                    }
                 }, label: {
                     Image("arrow_left")
                 })
@@ -128,7 +137,8 @@ struct SmarkResultView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            store.dispatch(.adLoad(.native))
+            /// 数据源
+            store.dispatch(.photoDisplayLoad(store.state.photoManagement.loadModel))
         }
     }
     

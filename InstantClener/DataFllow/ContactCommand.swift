@@ -152,7 +152,10 @@ struct ContactDeleteCommand: Command {
             }
         }
         group.notify(queue: .main) {
-            store.dispatch(.rootAlert(selectContactArray.count > 1 ? "\(selectContactArray.count) contacts cleaned up successfully" : "1 contact cleaned up successfully"))
+            store.dispatch(.adLoad(.interstitial))
+            store.dispatch(.adShow(.interstitial, { _ in
+                store.dispatch(.rootAlert(selectContactArray.count > 1 ? "\(selectContactArray.count) contacts cleaned up successfully" : "1 contact cleaned up successfully"))
+            }))
         }
         
         let sourceContacts = store.state.contact.contacts.filter {

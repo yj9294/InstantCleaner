@@ -12,6 +12,8 @@ import SwiftUI
 
 struct ImagePickerView: UIViewControllerRepresentable {
     
+    @EnvironmentObject var store: Store
+    
     @Environment(\.presentationMode) private var presentationMode
 
     let onImagePicked: ([UIImage])->Void
@@ -41,6 +43,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
         }
         
         func imagePicker(_ imagePicker: ImagePickerController, didCancelWithAssets assets: [PHAsset]) {
+            onImagePicked([])
         }
         
         func imagePicker(_ imagePicker: ImagePickerController, didReachSelectionLimit count: Int) {

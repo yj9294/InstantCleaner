@@ -80,6 +80,7 @@ struct PhotoFetchCommand: Command {
     }
     
     func completion(in store: Store) {
+        
         let time = Date().timeIntervalSince1970 - self.startDate.timeIntervalSince1970
         var model: [String] = []
         let isSimilarPhoto = store.state.photoManagement.loadModel!.loaded.similarPhoto.flatMap{$0}.count > 0 ? "1" : "0"
@@ -99,7 +100,16 @@ struct PhotoFetchCommand: Command {
             store.dispatch(.logEvent(.videoLoadSuccess, ["once": "\(ceil(time))", "result": string]))
         default: break
         }
+        /// 消失loadingView
+        store.dispatch(.presentLoading(false))
+        /// 进入management
         store.dispatch(.loadingPushEvent(true))
+        /// 更改导航条title
+        store.dispatch(.navigationTitle(store.state.loading.pushEvent.title))
+        
+        /// 加载广告
+        store.dispatch(.adLoad(.native))
+
         store.dispatch(.logEvent(.scanSucess))
     }
 }
@@ -241,9 +251,14 @@ struct PhotoDeleteCommand: Command {
                 return  PHAsset()
             })
         }
+        store.dispatch(.rootDelete(true))
         PHPhotoLibrary.shared().performChanges {
             PHAssetChangeRequest.deleteAssets(assets as NSArray)
         } completionHandler: { isSuccess, error in
+            DispatchQueue.main.async {
+                store.dispatch(.rootDelete(false))
+            }
+
             if isSuccess {
                 var message = ""
                 delete(point: point, in: store)
@@ -260,7 +275,12 @@ struct PhotoDeleteCommand: Command {
                         message = "\(assets.count) photo cleaned successfully"
                     }
                 }
-                store.dispatch(.rootAlert(message))
+                DispatchQueue.main.async {
+                    store.dispatch(.adLoad(.interstitial))
+                    store.dispatch(.adShow(.interstitial, { _ in
+                        store.dispatch(.rootAlert(message))
+                    }))
+                }
             }
         }
     }
@@ -516,7 +536,10 @@ struct PhotoPatchCommand: Command {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             if drawImage != nil {
-                store.dispatch(.rootAlert("photos saved successfully"))
+                store.dispatch(.adLoad(.interstitial))
+                store.dispatch(.adShow(.interstitial, { _ in
+                    store.dispatch(.rootAlert("photos saved successfully"))
+                }))
             }
         }
     }
@@ -561,8 +584,18 @@ struct CompressionStoreCommand: Command {
         _ = images.map {
             UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil)
         }
+        let loadedAd = store.state.ad.isLoaded(.interstitial)
+        if loadedAd {
+            store.dispatch(.adDisapear(.native))
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            store.dispatch(.rootAlert("photos saved successfully"))
+            store.dispatch(.adLoad(.interstitial))
+            store.dispatch(.adShow(.interstitial, { _ in
+                store.dispatch(.rootAlert("photos saved successfully"))
+                if loadedAd {
+                    store.dispatch(.adLoad(.native))
+                }
+            }))
         }
     }
 }

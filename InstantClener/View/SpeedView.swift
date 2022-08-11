@@ -76,19 +76,7 @@ struct SpeedView: View {
             }
             .padding(.horizontal, 16)
             
-            // 弹窗
-            if store.state.root.isAlert {
-                AlertView(message: store.state.root.alertMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.state.root.isAlert = false
-                        }
-                    }
-            }
         }
-        .onAppear(perform: {
-            store.dispatch(.adLoad(.native))
-        })
         .onDisappear(perform: {
             store.dispatch(.speedStopTest)
             store.dispatch(.speedStatus(.normal))
@@ -102,9 +90,14 @@ struct SpeedView: View {
                     store.dispatch(.speedPing("0"))
                     store.dispatch(.speedUpload(0))
                     store.dispatch(.speedDownload(0))
-                    self.presentationModel.wrappedValue.dismiss()
+                    
+                    store.state.home.isPushView = false
+                
                     store.dispatch(.adDisapear(.native))
-                    store.dispatch(.homeAdModel(.None))
+                    store.dispatch(.adLoad(.interstitial))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        store.dispatch(.adLoad(.native))
+                    }
                 }, label: {
                     Image("arrow_left")
                 })

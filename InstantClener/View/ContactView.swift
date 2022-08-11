@@ -143,14 +143,6 @@ struct ContactView: View {
                 }
             }
             
-            if store.state.root.isAlert {
-                AlertView(message: store.state.root.alertMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.state.root.isAlert = false
-                        }
-                    }
-            }
         }
         .background(Color(hex: 0xE2F3FF).ignoresSafeArea())
         .toolbar(content: {
@@ -167,13 +159,6 @@ struct ContactView: View {
                         .foregroundColor(Color(hex: 0x2961FF))
                     }
                 }
-            }
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    self.presentModel.wrappedValue.dismiss()
-                }, label: {
-                    Image("arrow_left")
-                })
             }
         })
         .navigationTitle(point.title)

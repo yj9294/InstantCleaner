@@ -123,9 +123,7 @@ class ADLoadModel: NSObject {
 
 extension ADLoadModel {
     func beginAddWaterFall(callback: ((_ isSuccess: Bool) -> Void)? = nil, in store: Store) {
-        if self.callback == nil {
-            self.callback = callback
-        }
+        self.callback = callback
         if isPreloadingAd == false, loadedArray.count == 0 {
             debugPrint("[AD] (\(position.rawValue) start to prepareLoad.--------------------")
             if let array: [ADModel] = store.state.ad.adConfig?.arrayWith(position), array.count > 0 {
@@ -139,9 +137,6 @@ extension ADLoadModel {
         } else if loadedArray.count > 0 {
             debugPrint("[AD] (\(position.rawValue)) loaded ad.")
             self.callback?(true)
-            if self.callback == nil {
-                debugPrint("------------")
-            }
         } else if loadingArray.count > 0 {
             debugPrint("[AD] (\(position.rawValue)) loading ad.")
             self.callback?(false)
@@ -159,22 +154,22 @@ extension ADLoadModel {
             debugPrint("[AD] (\(position.rawValue)) 用戶禁止請求廣告。")
             store.dispatch(.adClean(.native))
             store.dispatch(.adDisapear(.native))
-            callback?(false)
+            self.callback?(false)
             return
         }
         if store.state.ad.isLimited(in: store) {
             debugPrint("[AD] (\(position.rawValue)) 用戶超限制。")
-            callback?(false)
+            self.callback?(false)
             return
         }
         if loadedArray.count > 0 {
             debugPrint("[AD] (\(position.rawValue)) 已經加載完成。")
-            callback?(false)
+            self.callback?(false)
             return
         }
         if isPreloadingAd, preloadIndex == 0 {
             debugPrint("[AD] (\(position.rawValue)) 正在加載中.")
-            callback?(false)
+            self.callback?(false)
             return
         }
         
@@ -203,7 +198,7 @@ extension ADLoadModel {
             if result {
                 self.isPreloadingAd = false
                 self.loadedArray.append(ad)
-                callback?(true)
+                self.callback?(true)
                 return
             }
             
@@ -216,7 +211,7 @@ extension ADLoadModel {
                 } else {
                     debugPrint("[AD] (\(self.position.rawValue)) prepare Load Ad Failed: no more avaliable config.")
                     self.isPreloadingAd = false
-                    callback?(false)
+                    self.callback?(false)
                 }
             }
             

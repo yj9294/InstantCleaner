@@ -45,13 +45,17 @@ struct ContactManageView: View {
                         Text("Duplicate Contact")
                             .font(.system(size: 13))
                             .foregroundColor(Color(hex: 0x899092))
-                        NavigationLink {
-                            ContactView(point: .duplicateName)
+                        Button {
+                            store.dispatch(.contactPush)
+                            store.dispatch(.contactPushEvent(.duplicateName))
+                            store.dispatch(.adDisapear(.native))
                         } label: {
                             ItemView(point: .duplicateName)
                         }
-                        NavigationLink {
-                            ContactView(point: .duplicateNumber)
+                        Button {
+                            store.dispatch(.contactPush)
+                            store.dispatch(.contactPushEvent(.duplicateNumber))
+                            store.dispatch(.adDisapear(.native))
                         } label: {
                             ItemView(point: .duplicateNumber)
                         }
@@ -60,13 +64,17 @@ struct ContactManageView: View {
                         Text("Incomplete Contact")
                             .font(.system(size: 13))
                             .foregroundColor(Color(hex: 0x899092))
-                        NavigationLink {
-                            ContactView(point: .noName)
+                        Button {
+                            store.dispatch(.contactPush)
+                            store.dispatch(.contactPushEvent(.noName))
+                            store.dispatch(.adDisapear(.native))
                         } label: {
                             ItemView(point: .noName)
                         }
-                        NavigationLink {
-                            ContactView(point: .noNumber)
+                        Button {
+                            store.dispatch(.contactPush)
+                            store.dispatch(.contactPushEvent(.noNumber))
+                            store.dispatch(.adDisapear(.native))
                         } label: {
                             ItemView(point: .noNumber)
                         }
@@ -84,12 +92,18 @@ struct ContactManageView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    store.dispatch(.loadingPushEvent(false))
-                    store.dispatch(.homeStartScanAnimation)
-                    store.dispatch(.logEvent(.homeShow))
-                    store.dispatch(.logEvent(.homeScan))
-                    store.dispatch(.adDisapear(.native))
-                    store.dispatch(.homeAdModel(.None))
+                    if store.state.contact.push {
+                        store.state.contact.push = false
+                        store.dispatch(.adLoad(.native))
+                    } else {
+                        store.dispatch(.loadingPushEvent(false))
+                        store.dispatch(.homeStartScanAnimation)
+                        store.dispatch(.logEvent(.homeShow))
+                        store.dispatch(.logEvent(.homeScan))
+                        
+                        store.dispatch(.adDisapear(.native))
+                        store.dispatch(.adLoad(.native))
+                    }
                 }, label: {
                     Image("arrow_left")
                 })
@@ -98,9 +112,6 @@ struct ContactManageView: View {
         .navigationTitle("Contact Management")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            store.dispatch(.adLoad(.native))
-        }
     }
     
     struct ItemView: View{

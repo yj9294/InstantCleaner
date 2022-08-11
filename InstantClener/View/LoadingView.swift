@@ -45,8 +45,6 @@ struct LoadingView: View {
 extension LoadingView {
     func viewShow() {
 //        store.dispatch(.loadingStart)
-        store.dispatch(.adLoad(.interstitial))
-        store.dispatch(.adLoad(.native))
     }
 }
 

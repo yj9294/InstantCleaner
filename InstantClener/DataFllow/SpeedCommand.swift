@@ -10,12 +10,6 @@ import Foundation
 struct SpeedRequestIPCommand: Command {
     func execute(in store: Store) {
         
-        let appDecoder: JSONDecoder = {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            return decoder
-        }()
-        
         let token = SubscriptionToken()
         URLSession.shared
             .dataTaskPublisher(for: URL(string: "http://pv.sohu.com/cityjson?ie=utf-8")!)
@@ -71,6 +65,7 @@ struct SpeedStartTestCommand: Command {
             if store.state.speed.status == .normal {
                 timerToken.unseal()
                 token.unseal()
+                maxToken.unseal()
                 return
             }
             if isDownload, isPing {
@@ -79,7 +74,20 @@ struct SpeedStartTestCommand: Command {
                 store.dispatch(.speedDownload(downloadArray.max() ?? 0))
                 store.dispatch(.speedStatus(.tested))
                 store.dispatch(.speedStopTest)
-                store.dispatch(.rootAlert("Speed Test Done"))
+                
+                
+                // 广告
+                store.dispatch(.adLoad(.interstitial))
+                let loadedAd = store.state.ad.isLoaded(.interstitial)
+                if loadedAd {
+                    store.dispatch(.adDisapear(.native))
+                }
+                store.dispatch(.adShow(.interstitial, { _ in
+                    if loadedAd {
+                        store.dispatch(.adLoad(.native))
+                    }
+                    store.dispatch(.rootAlert("Speed Test Done"))
+                }))
                 return
             }
             let upload = store.state.speed.monitorFlowModel.send
@@ -94,10 +102,22 @@ struct SpeedStartTestCommand: Command {
             timerToken.unseal()
             maxToken.unseal()
             token.unseal()
-            store.dispatch(.speedUpload(0))
-            store.dispatch(.speedDownload(0))
-            store.dispatch(.speedPing("0"))
-            store.dispatch(.rootAlert("Speed Test Done"))
+            
+            store.dispatch(.speedUpload(uploadArray.max() ?? 0))
+            store.dispatch(.speedDownload(downloadArray.max() ?? 0))
+            
+            // 超时广告
+            store.dispatch(.adLoad(.interstitial))
+            let loadedAd = store.state.ad.isLoaded(.interstitial)
+            if loadedAd {
+                store.dispatch(.adDisapear(.native))
+            }
+            store.dispatch(.adShow(.interstitial, { _ in
+                if loadedAd {
+                    store.dispatch(.adLoad(.native))
+                }
+                store.dispatch(.rootAlert("Speed Test Done"))
+            }))
             isDownload = true
             isPing = true
         }.seal(in: maxToken)

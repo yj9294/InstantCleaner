@@ -68,6 +68,8 @@ extension Store {
             appState.root.isAlert = true
         case .rootBackgrund(let isEnter):
             appState.root.isEnterbackground = isEnter
+        case .rootDelete(let isDelete):
+            appState.root.isDelete = isDelete
             
         case .launchBegin:
             appState.root.selection = .launch
@@ -82,8 +84,6 @@ extension Store {
             
         case .tabbar(let index):
             appState.tabbar.selection = index
-        case .tabbarPushLoading(let isPush):
-            appState.tabbar.isPushLoading = isPush
             
         case .homeStartScanAnimation:
             if appState.home.isScanAnimation {
@@ -107,6 +107,8 @@ extension Store {
                 break
             }
             appState.home.pushEvent = event
+        case .navigationTitle(let title):
+            appState.home.navigationTitle = title
             
             
         case .loadingStart:
@@ -150,8 +152,10 @@ extension Store {
             appCommand = PhotoAllSelectCommand(point, isAll)
         case .photoDidselect(let item):
             appCommand = PhotoDidSelectCommand(item)
-        case .photoDeleting(let isDelete):
-            appState.photoManagement.deleting = isDelete
+        case .photoPushSubView(let point):
+            appState.photoManagement.pushEvent = point
+        case .photoPush:
+            appState.photoManagement.push = true
             
         case .contactLoad:
             appCommand = ContactLoadCommand()
@@ -175,6 +179,11 @@ extension Store {
             appCommand = ContactAllSelectCommand(point)
         case .contactCancel:
             appCommand = ContactCancelSelectCommand()
+        case .contactPush:
+            appState.contact.push = true
+        case .contactPushEvent(let event):
+            appState.contact.pushEvent = event
+            
             
         case .calendarLoad:
             appCommand = CalendarCommand()
@@ -191,6 +200,8 @@ extension Store {
         
         case .presentImagePicker:
             appState.home.isPresentImagePicker = true
+        case .presentLoading(let isPush):
+            appState.home.isPresentLoading = isPush
         
         case .patchImages(let images):
             appState.patch.images = images

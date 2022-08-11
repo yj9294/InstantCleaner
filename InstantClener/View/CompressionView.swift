@@ -68,21 +68,16 @@ struct CompressionView: View {
                 .linearGradient(colors: [Color(hex: 0xE2F3FF), Color(hex: 0xF8FEFF)], startPoint: .topLeading, endPoint: .bottomTrailing)
             ))
             
-            if store.state.root.isAlert {
-                AlertView(message: store.state.root.alertMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.state.root.isAlert = false
-                        }
-                    }
-            }
         }
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    self.presentationModel.wrappedValue.dismiss()
+                    store.state.home.isPushView = false
+
+                    /// 返回首页
                     store.dispatch(.adDisapear(.native))
-                    store.dispatch(.homeAdModel(.None))
+                    store.dispatch(.adLoad(.interstitial))
+                    store.dispatch(.adLoad(.native))
                 }, label: {
                     Image("arrow_left")
                 })
@@ -92,9 +87,6 @@ struct CompressionView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(false)
-        .onAppear {
-            store.dispatch(.adLoad(.native))
-        }
     }
 }
 

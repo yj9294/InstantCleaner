@@ -126,9 +126,6 @@ struct ADLoadCommand: Command {
             // 插屏直接一步加载
             if position.isInterstitialAd {
                 ad.beginAddWaterFall(in: store)
-                ad.beginAddWaterFall(callback: { _ in
-                
-                }, in: store)
             } else if position.isNativeAD{
                 // 原生广告需要同步显示
                 ad.beginAddWaterFall(callback: { isSuccess in
@@ -179,8 +176,8 @@ struct ADShowCommand: Command {
                     store.dispatch(.adIncreaseClickTimes)
                 }
                 ad.closeHandler = {
-                    store.dispatch(.adDisapear(position))
                     completion?(.None)
+                    store.dispatch(.adDisapear(position))
                 }
                 ad.clickTwiceHandler = {
                     store.dispatch(.adClean(.all))
@@ -220,6 +217,7 @@ struct ADShowCommand: Command {
                 } else {
                     let adViewModel: NativeViewModel = .None
                     completion?(adViewModel)
+                    store.dispatch(.homeAdModel(.None))
                 }
             } else {
                 /// 预加载回来数据 当时已经有显示数据了 并且没超过限制
@@ -227,6 +225,7 @@ struct ADShowCommand: Command {
                     return
                 }
                 completion?(.None)
+                store.dispatch(.homeAdModel(.None))
             }
         default:
             break
@@ -315,7 +314,10 @@ struct ADDisapearCommand: Command {
                 $0.position == position
             }.first?.closeDisplay()
         }
-        store.dispatch(.homeAdModel(.None))
+        
+        if position == .native {
+            store.dispatch(.homeAdModel(.None))
+        }
     }
 }
 

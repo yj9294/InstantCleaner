@@ -156,18 +156,6 @@ struct SimilarPhotoView: View {
                 }
             }
             
-            if store.state.photoManagement.deleting {
-                DeleteView()
-            }
-            
-            if store.state.root.isAlert {
-                AlertView(message: store.state.root.alertMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.state.root.isAlert = false
-                        }
-                    }
-            }
         }
         .background(Color(hex: 0xE2F3FF).ignoresSafeArea())
         .toolbar(content: {
@@ -185,20 +173,10 @@ struct SimilarPhotoView: View {
                     }
                 }
             }
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    self.presentModel.wrappedValue.dismiss()
-                }, label: {
-                    Image("arrow_left")
-                })
-            }
         })
         .navigationTitle(point.title)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            viewShow()
-        }
     }
         
     struct ItemView: View {
@@ -244,9 +222,6 @@ struct SimilarPhotoView: View {
 }
 
 extension SimilarPhotoView {
-    func viewShow() {
-    }
-    
     func selectAllAction() {
         store.dispatch(.photoAllSelect(point, true))
     }
@@ -263,7 +238,6 @@ extension SimilarPhotoView {
     func didSelect(item: PhotoItem) {
         store.dispatch(.photoDidselect(item))
     }
-    
 }
 
 struct SimilarPhotoView_Previews: PreviewProvider {

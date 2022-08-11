@@ -49,6 +49,8 @@ extension AppState {
         var isAlert: Bool = false
         /// 弹窗详情
         var alertMessage: String = "Unknow."
+        
+        var isDelete: Bool = false
     
         enum Index {
             case launch, tab
@@ -59,8 +61,6 @@ extension AppState {
 extension AppState {
     struct Tabbar {
         var selection: Index = .home
-        /// 是否弹出加载界面
-        var isPushLoading: Bool = false
         enum Index {
             case home, clean, setting
         }
@@ -115,6 +115,10 @@ extension AppState {
         
         /// 弹出图片选择
         var isPresentImagePicker = false
+        
+        /// 弹出loading
+        var isPresentLoading = false
+        
         /// 进入patch view
         var isPushView = false
         /// 当前是进入patch还是进入的是compression
@@ -122,6 +126,9 @@ extension AppState {
         
         /// 原生广告
         var adModel: NativeViewModel = .None
+        
+        /// 导航条title
+        var navigationTitle: String = "Instant Cleaner"
 
     }
 }
@@ -131,7 +138,7 @@ extension AppState {
         /// 加载总时长
         var duration: Double = 0.0
         /// 加载最长时间
-        var maxTime: Double = 5.0
+        var maxTime: Double = 50.0
         /// 加载最短时间
         var minTime: Double = 2.0
         ///  加载进度
@@ -144,8 +151,6 @@ extension AppState {
 
 extension AppState {
     struct PhotoManagement{
-        /// 删除中
-        var deleting: Bool = false
         /// 加载进度
         var progress: Int = 0
         /// 加载模型
@@ -159,7 +164,12 @@ extension AppState {
         /// 视频使用总内存
         var videoDisk: UInt64 = 0
         /// 总内存
-        var smartDisk: UInt64 = 0        
+        var smartDisk: UInt64 = 0
+        
+        /// 是否进入子页面
+        var push: Bool = false
+        
+        var pushEvent: Point = .similarPhoto
         
         
         /// 相似图片
@@ -271,7 +281,7 @@ extension AppState {
         
         
         enum Event: CaseIterable {
-            case smart, photo, video, contact, calendar, patch, compression
+            case smart, photo, video, contact, calendar, patch, compression, speed
             var title: String {
                 switch self {
                 case .smart:
@@ -280,6 +290,10 @@ extension AppState {
                     return "Photo Management"
                 case .video:
                     return "Video Management"
+                case .contact:
+                    return "Contact Management"
+                case .calendar:
+                    return "Calendar Management"
                 default:
                     return ""
                 }
@@ -378,6 +392,11 @@ extension AppState {
         var duplicationNumber: [[ContactItem]] = []
         var noNumber: [[ContactItem]] = []
         var noName: [[ContactItem]] = []
+        
+        /// 是否进入子页面
+        var push: Bool = false
+        
+        var pushEvent: Point = .duplicateName
         
         enum Point: String {
             case duplicateName, duplicateNumber, noName, noNumber

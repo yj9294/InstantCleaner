@@ -46,6 +46,12 @@ struct LaunchCommand: Command {
                 token.unseal()
                 store.dispatch(.adShow(.interstitial, { _ in
                     store.dispatch(.launched)
+                    
+                    store.dispatch(.adLoad(.interstitial))
+                    store.dispatch(.adLoad(.native))
+                    
+                    store.dispatch(.logEvent(.homeShow))
+                    store.dispatch(.logEvent(.homeScan))
                 }))
             }
             
@@ -94,11 +100,11 @@ struct PermissionCommand: Command {
                         store.dispatch(.loadingEvent(.contact))
                         store.dispatch(.loadingStart)
                         store.dispatch(.contactLoad)
-                        store.dispatch(.tabbarPushLoading(true))
+                        store.dispatch(.presentLoading(true))
                         store.dispatch(.homeStopScanAnimation)
                         
+                        ///离开
                         store.dispatch(.adDisapear(.native))
-                        store.dispatch(.homeAdModel(.None))
                     }
                 }
             }
@@ -112,11 +118,10 @@ struct PermissionCommand: Command {
                         store.dispatch(.loadingEvent(.calendar))
                         store.dispatch(.loadingStart)
                         store.dispatch(.calendarLoad)
-                        store.dispatch(.tabbarPushLoading(true))
+                        store.dispatch(.presentLoading(true))
                         store.dispatch(.homeStopScanAnimation)
                         
                         store.dispatch(.adDisapear(.native))
-                        store.dispatch(.homeAdModel(.None))
                     }
                 }
             }
@@ -163,18 +168,33 @@ struct LoadingCommand: Command {
         store.dispatch(.loadingProgress(0.0))
         store.dispatch(.loadingDuration(minTime))
         let startDate = Date()
+        let duration = store.state.loading.duration
         Timer.publish(every: 0.01, on: .main, in: .common).autoconnect().sink { _ in
             let progress = store.state.loading.progress
-            let totalCount = 1.0 / 0.01 * store.state.loading.duration
-            let value = progress + 1 / totalCount
+            let totalCount = 1.0 / 0.01 * duration
+            let value = progress + duration / totalCount
             if value < 1.0 {
                 store.dispatch(.loadingProgress(value))
             } else {
                 token.unseal()
                 if !store.state.loading.isPushEvent {
+                    /// 消失loading View
+                    store.dispatch(.presentLoading(false))
+                    /// 进入management view
                     store.dispatch(.loadingPushEvent(true))
+                    
+                    /// 更改title
+                    store.dispatch(.navigationTitle(store.state.loading.pushEvent.title))
+
+                    /// 打点
                     store.dispatch(.logEvent(.scanStart))
+                    
+                    /// contact 打点雨逻辑
                     if store.state.loading.pushEvent == .contact {
+                        
+                        /// contact 需要加载native ad
+                        store.dispatch(.adLoad(.native))
+
                         let isNoName = store.state.contact.noName.flatMap {
                             $0
                         }.count > 0 ? "1" : "0"

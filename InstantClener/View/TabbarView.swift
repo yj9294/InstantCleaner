@@ -19,13 +19,14 @@ struct TabbarView: View {
             set: {
                 if $0 != AppState.Tabbar.Index.home {
                     store.dispatch(.adDisapear(.native))
-                    store.dispatch(.homeAdModel(.None))
+                } else {
+                    store.dispatch(.adLoad(.native))
                 }
                 
                 if $0 == AppState.Tabbar.Index.clean {
                     store.dispatch(.loadingEvent(.smart))
                     store.dispatch(.photoLoad(.smart))
-                    store.dispatch(.tabbarPushLoading(true))
+                    store.dispatch(.presentLoading(true))
                     store.dispatch(.homeStopScanAnimation)
                     return
                 }
@@ -57,52 +58,61 @@ struct TabbarView: View {
             .onAppear {
                 viewShow()
             }
+
             
-            if store.state.home.isPushView {
-                NavigationLink(isActive: $store.state.home.isPushView) {
-                    if store.state.home.pushEvent == .patch {
-                        PatchView()
-                    } else if store.state.home.pushEvent == .compression {
-                        CompressionView()
-                    } else {
-                        EmptyView()
-                    }
-                } label: {
-                    EmptyView()
-                }
+            if store.state.home.isPresentLoading  {
+                LoadingView()
+                    .navigationBarHidden(true)
             }
             
-            if store.state.tabbar.isPushLoading {
-                NavigationLink(isActive: $store.state.tabbar.isPushLoading) {
-                    LoadingView()
-                        .navigationBarBackButtonHidden(true)
-                } label: {
-                    EmptyView()
+            
+            if store.state.home.isPushView {
+                if store.state.home.pushEvent == .patch {
+                    PatchView()
+                } else if store.state.home.pushEvent == .compression {
+                    CompressionView()
+                } else if store.state.home.pushEvent == .speed {
+                    SpeedView()
                 }
             }
             
             if store.state.loading.isPushEvent {
-                NavigationLink(isActive: $store.state.loading.isPushEvent) {
-                    if store.state.loading.pushEvent == .contact {
-                        ContactManageView()
-                            .navigationBarHidden(false)
-                    } else if store.state.loading.pushEvent == .calendar {
-                        CalendarView()
-                            .navigationBarHidden(false)
-                    } else {
-                        SmarkResultView(event: store.state.loading.pushEvent)
-                            .navigationBarHidden(false)
-                    }
-                } label: {
-                    EmptyView()
+                if store.state.loading.pushEvent == .contact {
+                    ContactManageView()
+                        .navigationBarHidden(false)
+                } else if store.state.loading.pushEvent == .calendar {
+                    CalendarView()
+                        .navigationBarHidden(false)
+                } else {
+                    SmarkResultView(event: store.state.loading.pushEvent)
+                        .navigationBarHidden(false)
                 }
             }
-
             
-            if store.state.permission.alert == nil {
-                PermissionView {
-                    store.dispatch(.permissionAlert)
-                }
+            if store.state.home.isPresentImagePicker {
+                ImagePickerView { images in
+                    store.state.home.isPresentImagePicker = false
+                    if images.count > 0 {
+                        if store.state.home.pushEvent == .patch {
+                            store.dispatch(.patchImages(images))
+                        } else if store.state.home.pushEvent == .compression {
+                            store.dispatch(.compression(images))
+                            store.dispatch(.adLoad(.native))
+                        }
+                        store.dispatch(.homePush)
+                    } else {
+                        store.dispatch(.adLoad(.interstitial))
+                        store.dispatch(.adLoad(.native))
+                    }
+                }.navigationBarHidden(true)
+            }
+            
+            if store.state.photoManagement.push {
+                SimilarPhotoView(point: store.state.photoManagement.pushEvent)
+            }
+            
+            if store.state.contact.push {
+                ContactView(point: store.state.contact.pushEvent)
             }
             
             if store.state.home.isShowPhotoPermission {
@@ -113,6 +123,22 @@ struct TabbarView: View {
                         }
                     }
             }
+        
+            if store.state.root.isAlert {
+                AlertView(message: store.state.root.alertMessage)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            store.state.root.isAlert = false
+                        }
+                    }
+            }
+            
+            if store.state.permission.alert == nil {
+                PermissionView {
+                    store.dispatch(.permissionAlert)
+                }
+            }
+            
         }
     }
     

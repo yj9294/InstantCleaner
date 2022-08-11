@@ -94,14 +94,6 @@ struct CalendarView: View {
                 }
             }
             
-            if store.state.root.isAlert {
-                AlertView(message: store.state.root.alertMessage)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.state.root.isAlert = false
-                        }
-                    }
-            }
         }
         .alert(isPresented: $isAlerDelete) {
             Alert(title: Text("Delete selected schedule.(\(selectArray.count))"), message: Text("The event will be removed from the calendar."), primaryButton: .default(Text("Cancel")), secondaryButton: .default(Text("Delete"), action: {

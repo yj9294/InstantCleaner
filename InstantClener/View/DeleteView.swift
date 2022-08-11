@@ -8,33 +8,37 @@
 import SwiftUI
 
 struct DeleteView: View {
+    @State private var isRotated = false
+    var animation: Animation {    Animation.linear(duration: 3).repeatForever(autoreverses: false)}
     var body: some View {
         VStack{
             Spacer()
             HStack {
                 Spacer()
-                ActivityIndicatorView()
+                VStack(spacing: 10){
+                    Image("deleting")
+                        .resizable()
+                        .frame(width: 27, height: 27)
+                        .rotationEffect(Angle.degrees(isRotated ? 360 : 0))
+                        .onAppear(perform: {
+                            withAnimation(animation) {
+                                isRotated = !isRotated
+                            }
+                        })
+
+                    Text("loading")
+                        .foregroundColor(Color(hex: 0x232936))
+                        .font(.system(size: 13))
+                        .lineLimit(0)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 17)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.white))
                 Spacer()
             }
             Spacer()
         }
         .background(Color(hex: 0x000000, alpha: 0.5).ignoresSafeArea())
-    }
-}
-
-struct ActivityIndicatorView: UIViewRepresentable {
-    let view = UIActivityIndicatorView(style: .medium)
-    func makeUIView(context: Context) -> some UIView {
-        view.startAnimating()
-        return self.view
-    }
-    
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-    }
-}
-
-struct DeleteView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeleteView()
     }
 }

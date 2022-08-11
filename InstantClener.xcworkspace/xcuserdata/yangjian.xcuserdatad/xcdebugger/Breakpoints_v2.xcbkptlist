@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8926A0EA-363C-44C8-BEE2-ECA894222165"
-            shouldBeEnabled = "Yes"
+            uuid = "F50A72AB-CDA8-4D18-A622-C78ADA38F7EF"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InstantClener/DataFllow/ADModel.swift"
+            filePath = "InstantClener/DataFllow/Store.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
-            landmarkName = "beginAddWaterFall(callback:in:)"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
+            landmarkName = "reduce(state:action:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

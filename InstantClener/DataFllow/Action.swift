@@ -30,6 +30,9 @@ enum Action {
     // 是否进入后台
     case rootBackgrund(Bool)
     
+    // shifou 是否显示正在删除
+    case rootDelete(Bool)
+    
     // MARK: launch
     /// 冷热启动
     case launchBegin
@@ -43,8 +46,6 @@ enum Action {
     // MARK: Tab
     /// 选中某个tab item
     case tabbar(AppState.Tabbar.Index)
-    /// 是否进入loading 界面
-    case tabbarPushLoading(Bool)
 
     // MARK: home
     /// 扫描动画
@@ -54,6 +55,8 @@ enum Action {
     case homeShowPhotoPermission(Bool)
     case homePushEvent(AppState.PhotoManagement.Event)
     case homePush
+    /// 更改导航条 title
+    case navigationTitle(String)
     // MARK: loading
     case loadingStart
     case loadingDuration(Double)
@@ -74,7 +77,8 @@ enum Action {
     case photoAllSelect(AppState.PhotoManagement.Point, Bool)
     case photoCancel(AppState.PhotoManagement.Point)
     case photoDidselect(PhotoItem)
-    case photoDeleting(Bool)
+    case photoPushSubView(AppState.PhotoManagement.Point)
+    case photoPush
     // MARK: Contack
     case contactLoad
     case contactStore([ContactItem])
@@ -87,6 +91,9 @@ enum Action {
     case contactDelete
     case contactAllSelect(AppState.Contact.Point)
     case contactCancel
+    
+    case contactPush
+    case contactPushEvent(AppState.Contact.Point)
     // MARK: Calendar
     case calendarLoad
     case calendarStore([[CalendarItem]])
@@ -96,7 +103,8 @@ enum Action {
     case calendarDelete
     
     case presentImagePicker
-
+    case presentLoading(Bool)
+    
     // MARK: patch
     case patchImages([UIImage])
     case patchDirection(AppState.Patch.Point)
