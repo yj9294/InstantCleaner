@@ -119,7 +119,7 @@ struct CalendarView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    store.dispatch(.loadingPushEvent(false))
+                    store.dispatch(.rootShowManageView(false))
                     store.dispatch(.homeStartScanAnimation)
                     store.dispatch(.logEvent(.homeShow))
                     store.dispatch(.logEvent(.homeScan))

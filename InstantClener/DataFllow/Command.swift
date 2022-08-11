@@ -97,10 +97,16 @@ struct PermissionCommand: Command {
                 DispatchQueue.main.async {
                     store.dispatch(.permissionContact(CNContactStore.authorizationStatus(for: .contacts)))
                     if granted {
-                        store.dispatch(.loadingEvent(.contact))
+                        /// 同步进入loading
+                        store.dispatch(.rootShowLoadingView(true))
+                        /// 确定manage view 是 contact
+                        store.dispatch(.rootManageView(.contact))
+                        /// 开始加载动画
                         store.dispatch(.loadingStart)
+                        /// 加载 contact
                         store.dispatch(.contactLoad)
-                        store.dispatch(.presentLoading(true))
+                        
+                        /// 停止首页扫描动画
                         store.dispatch(.homeStopScanAnimation)
                         
                         ///离开
@@ -114,11 +120,14 @@ struct PermissionCommand: Command {
                 DispatchQueue.main.async {
                     store.dispatch(.permissionCalendar(EKEventStore.authorizationStatus(for: .event)))
                     if granted{
-
-                        store.dispatch(.loadingEvent(.calendar))
+                        /// 同步进入loading
+                        store.dispatch(.rootShowLoadingView(true))
+                        
+                        /// 确定manage view 是 contact
+                        store.dispatch(.rootManageView(.contact))
+                        
                         store.dispatch(.loadingStart)
                         store.dispatch(.calendarLoad)
-                        store.dispatch(.presentLoading(true))
                         store.dispatch(.homeStopScanAnimation)
                         
                         store.dispatch(.adDisapear(.native))
@@ -177,20 +186,20 @@ struct LoadingCommand: Command {
                 store.dispatch(.loadingProgress(value))
             } else {
                 token.unseal()
-                if !store.state.loading.isPushEvent {
+                if !store.state.root.isShowManageView {
                     /// 消失loading View
-                    store.dispatch(.presentLoading(false))
+                    store.dispatch(.rootShowLoadingView(false))
                     /// 进入management view
-                    store.dispatch(.loadingPushEvent(true))
+                    store.dispatch(.rootShowManageView(true))
                     
                     /// 更改title
-                    store.dispatch(.navigationTitle(store.state.loading.pushEvent.title))
+                    store.dispatch(.navigationTitle(store.state.root.manageEvent.title))
 
                     /// 打点
                     store.dispatch(.logEvent(.scanStart))
                     
                     /// contact 打点雨逻辑
-                    if store.state.loading.pushEvent == .contact {
+                    if store.state.root.manageEvent == .contact {
                         
                         /// contact 需要加载native ad
                         store.dispatch(.adLoad(.native))

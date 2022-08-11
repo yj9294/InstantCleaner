@@ -72,7 +72,8 @@ struct CompressionView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    store.state.home.isPushView = false
+                    store.dispatch(.rootShowManageView(false))
+                    store.dispatch(.navigationTitle("Instant Cleaner"))
 
                     /// 返回首页
                     store.dispatch(.adDisapear(.native))

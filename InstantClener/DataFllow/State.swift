@@ -47,10 +47,27 @@ extension AppState {
 
         /// 弹窗
         var isAlert: Bool = false
+        
         /// 弹窗详情
         var alertMessage: String = "Unknow."
         
+        /// 是否显示删除进度
         var isDelete: Bool = false
+        
+        
+        /// 是否展示photopermissionview
+        var isShowPhotoPermission = false
+        
+        /// 弹出图片选择
+        var isShowImagePicker = false
+        
+        /// 弹出loading
+        var isShowLoading = false
+        
+        /// 进入patch view
+        var isShowManageView = false
+        /// 当前是进入patch还是进入的是compression
+        var manageEvent: AppState.PhotoManagement.Event = .photo
     
         enum Index {
             case launch, tab
@@ -61,6 +78,7 @@ extension AppState {
 extension AppState {
     struct Tabbar {
         var selection: Index = .home
+        
         enum Index {
             case home, clean, setting
         }
@@ -110,19 +128,6 @@ extension AppState {
         }
         /// 进度
         var progress: Double = 0.0
-        /// 是否展示photopermissionview
-        var isShowPhotoPermission = false
-        
-        /// 弹出图片选择
-        var isPresentImagePicker = false
-        
-        /// 弹出loading
-        var isPresentLoading = false
-        
-        /// 进入patch view
-        var isPushView = false
-        /// 当前是进入patch还是进入的是compression
-        var pushEvent: AppState.PhotoManagement.Event = .photo
         
         /// 原生广告
         var adModel: NativeViewModel = .None
@@ -143,9 +148,6 @@ extension AppState {
         var minTime: Double = 2.0
         ///  加载进度
         var progress: Double = 0.0
-        /// 进入result
-        var isPushEvent: Bool = false
-        var pushEvent: AppState.PhotoManagement.Event = .smart
     }
 }
 

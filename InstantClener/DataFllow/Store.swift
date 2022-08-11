@@ -70,6 +70,18 @@ extension Store {
             appState.root.isEnterbackground = isEnter
         case .rootDelete(let isDelete):
             appState.root.isDelete = isDelete
+        case .rootShowManageView(let isShow):
+            appState.root.isShowManageView = isShow
+        case .rootShowPhotoPermission(let isShow):
+            appState.root.isShowPhotoPermission = isShow
+        case .rootManageView(let event):
+            appState.root.manageEvent = event
+        case .rootShowLoadingView(let isShow):
+            appState.root.isShowLoading = isShow
+        case .rootShowImagePickerView(let isShow):
+            appState.root.isShowImagePicker = isShow
+            
+            
             
         case .launchBegin:
             appState.root.selection = .launch
@@ -95,18 +107,6 @@ extension Store {
             appState.home.isScanAnimation = false
         case .homeProgress(let progress):
             appState.home.progress = progress
-        case .homeShowPhotoPermission(let isShow):
-            appState.home.isShowPhotoPermission = isShow
-        case .homePush:
-            if appState.home.isPushView == true {
-                break
-            }
-            appState.home.isPushView = true
-        case .homePushEvent(let event):
-            if appState.home.pushEvent == event  {
-                break
-            }
-            appState.home.pushEvent = event
         case .navigationTitle(let title):
             appState.home.navigationTitle = title
             
@@ -121,14 +121,6 @@ extension Store {
             appState.loading.maxTime = maxTime
         case .loadingMinTime(let minTime):
             appState.loading.minTime = minTime
-        case .loadingPushEvent(let isPush):
-            if appState.loading.isPushEvent == isPush {
-                break
-            }
-            appState.loading.isPushEvent = isPush
-            
-        case .loadingEvent(let event):
-            appState.loading.pushEvent = event
             
         case .photoStopLoad:
             appState.photoManagement.loadModel?.stopLoad()
@@ -197,11 +189,6 @@ extension Store {
             appCommand = CalendarSelectCommand(item)
         case .calendarDelete:
             appCommand = CalendarDeleteCommand()
-        
-        case .presentImagePicker:
-            appState.home.isPresentImagePicker = true
-        case .presentLoading(let isPush):
-            appState.home.isPresentLoading = isPush
         
         case .patchImages(let images):
             appState.patch.images = images

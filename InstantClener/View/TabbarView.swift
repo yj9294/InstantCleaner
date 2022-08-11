@@ -24,9 +24,9 @@ struct TabbarView: View {
                 }
                 
                 if $0 == AppState.Tabbar.Index.clean {
-                    store.dispatch(.loadingEvent(.smart))
+                    store.dispatch(.rootManageView(.smart))
                     store.dispatch(.photoLoad(.smart))
-                    store.dispatch(.presentLoading(true))
+                    store.dispatch(.rootShowLoadingView(true))
                     store.dispatch(.homeStopScanAnimation)
                     return
                 }
@@ -60,51 +60,44 @@ struct TabbarView: View {
             }
 
             
-            if store.state.home.isPresentLoading  {
+            if store.state.root.isShowLoading  {
                 LoadingView()
                     .navigationBarHidden(true)
             }
             
-            
-            if store.state.home.isPushView {
-                if store.state.home.pushEvent == .patch {
-                    PatchView()
-                } else if store.state.home.pushEvent == .compression {
-                    CompressionView()
-                } else if store.state.home.pushEvent == .speed {
-                    SpeedView()
-                }
-            }
-            
-            if store.state.loading.isPushEvent {
-                if store.state.loading.pushEvent == .contact {
-                    ContactManageView()
-                        .navigationBarHidden(false)
-                } else if store.state.loading.pushEvent == .calendar {
-                    CalendarView()
-                        .navigationBarHidden(false)
-                } else {
-                    SmarkResultView(event: store.state.loading.pushEvent)
-                        .navigationBarHidden(false)
-                }
-            }
-            
-            if store.state.home.isPresentImagePicker {
+            if store.state.root.isShowImagePicker {
                 ImagePickerView { images in
-                    store.state.home.isPresentImagePicker = false
+                    store.dispatch(.rootShowImagePickerView(false))
                     if images.count > 0 {
-                        if store.state.home.pushEvent == .patch {
+                        if store.state.root.manageEvent == .patch {
                             store.dispatch(.patchImages(images))
-                        } else if store.state.home.pushEvent == .compression {
+                        } else if store.state.root.manageEvent == .compression {
                             store.dispatch(.compression(images))
                             store.dispatch(.adLoad(.native))
                         }
-                        store.dispatch(.homePush)
+                        store.dispatch(.rootShowManageView(true))
                     } else {
                         store.dispatch(.adLoad(.interstitial))
                         store.dispatch(.adLoad(.native))
                     }
                 }.navigationBarHidden(true)
+            }
+            
+            if store.state.root.isShowManageView {
+                switch store.state.root.manageEvent {
+                case .smart, .photo, .video:
+                    ManagementView(event: store.state.root.manageEvent)
+                case .contact:
+                    ContactManageView()
+                case .calendar:
+                    CalendarView()
+                case .patch:
+                    PatchView()
+                case .speed:
+                    SpeedView()
+                case .compression:
+                    CompressionView()
+                }
             }
             
             if store.state.photoManagement.push {
@@ -115,11 +108,11 @@ struct TabbarView: View {
                 ContactView(point: store.state.contact.pushEvent)
             }
             
-            if store.state.home.isShowPhotoPermission {
+            if store.state.root.isShowPhotoPermission {
                 PhotoPermissionView()
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            store.dispatch(.homeShowPhotoPermission(false))
+                            store.dispatch(.rootShowPhotoPermission(false))
                         }
                     }
             }

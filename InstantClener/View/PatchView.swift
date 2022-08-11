@@ -85,12 +85,13 @@ struct PatchView: View {
             }
             
         }
+        .background(Color(hex: 0xE2F3FF))
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    
-                    store.state.home.isPushView = false
-                    
+                    store.dispatch(.rootShowManageView(false))
+                    store.dispatch(.navigationTitle("Instant Cleaner"))
+
                     store.dispatch(.adDisapear(.native))
                     store.dispatch(.adLoad(.native))
                     store.dispatch(.adLoad(.interstitial))

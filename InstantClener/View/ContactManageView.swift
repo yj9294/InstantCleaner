@@ -96,7 +96,8 @@ struct ContactManageView: View {
                         store.state.contact.push = false
                         store.dispatch(.adLoad(.native))
                     } else {
-                        store.dispatch(.loadingPushEvent(false))
+                        store.dispatch(.rootShowManageView(false))
+                        store.dispatch(.navigationTitle("Instant Cleaner"))
                         store.dispatch(.homeStartScanAnimation)
                         store.dispatch(.logEvent(.homeShow))
                         store.dispatch(.logEvent(.homeScan))

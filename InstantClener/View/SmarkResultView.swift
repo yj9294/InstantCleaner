@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SmarkResultView: View {
+struct ManagementView: View {
     @EnvironmentObject var store: Store
     
     var event: AppState.PhotoManagement.Event
@@ -114,11 +114,13 @@ struct SmarkResultView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     if store.state.photoManagement.push {
-                        store.state.photoManagement.push = false
+                        store.dispatch(.rootShowManageView(false))
+                        store.dispatch(.navigationTitle("Instant Cleaner"))
+
                         store.dispatch(.adLoad(.native))
                     } else {
                         store.dispatch(.photoStopLoad)
-                        store.dispatch(.loadingPushEvent(false))
+                        store.dispatch(.rootShowManageView(false))
                         store.dispatch(.homeStartScanAnimation)
                         store.dispatch(.logEvent(.homeShow))
                         store.dispatch(.logEvent(.homeScan))

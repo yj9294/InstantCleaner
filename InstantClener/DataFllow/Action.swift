@@ -33,6 +33,20 @@ enum Action {
     // shifou 是否显示正在删除
     case rootDelete(Bool)
     
+    /// 进入management view
+    case rootShowManageView(Bool)
+    
+    /// 展示photo 权限
+    case rootShowPhotoPermission(Bool)
+    
+    /// 进入 某个 manage
+    case rootManageView(AppState.PhotoManagement.Event)
+    
+    /// 展示 loading
+    case rootShowLoadingView(Bool)
+    /// 展示 image picker
+    case rootShowImagePickerView(Bool)
+    
     // MARK: launch
     /// 冷热启动
     case launchBegin
@@ -52,9 +66,6 @@ enum Action {
     case homeStartScanAnimation
     case homeStopScanAnimation
     case homeProgress(Double)
-    case homeShowPhotoPermission(Bool)
-    case homePushEvent(AppState.PhotoManagement.Event)
-    case homePush
     /// 更改导航条 title
     case navigationTitle(String)
     // MARK: loading
@@ -63,8 +74,6 @@ enum Action {
     case loadingMaxTime(Double)
     case loadingMinTime(Double)
     case loadingProgress(Double)
-    case loadingPushEvent(Bool)
-    case loadingEvent(AppState.PhotoManagement.Event)
     // MARK: PhotoManagement
     case photoLoad(AppState.PhotoManagement.Event)
     case photoStopLoad
@@ -101,9 +110,6 @@ enum Action {
     case calendarAllSelect
     case calendarSelect(CalendarItem)
     case calendarDelete
-    
-    case presentImagePicker
-    case presentLoading(Bool)
     
     // MARK: patch
     case patchImages([UIImage])

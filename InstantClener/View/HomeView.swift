@@ -251,9 +251,9 @@ extension HomeView {
 
 extension HomeView.TopView {
     func smartClean() {
-        store.dispatch(.loadingEvent(.smart))
+        store.dispatch(.rootManageView(.smart))
         store.dispatch(.photoLoad(.smart))
-        store.dispatch(.presentLoading(true))
+        store.dispatch(.rootShowLoadingView(true))
         store.dispatch(.homeStopScanAnimation)
         store.dispatch(.logEvent(.homeClickSmart))
         store.dispatch(.logEvent(.scanStart))
@@ -283,10 +283,11 @@ extension HomeView.CenterView {
             return
         }
         
-        store.dispatch(.loadingEvent(.contact))
+        store.dispatch(.rootManageView(.contact))
         store.dispatch(.loadingStart)
         store.dispatch(.contactLoad)
-        store.dispatch(.presentLoading(true))
+        /// present loading
+        store.dispatch(.rootShowLoadingView(true))
         store.dispatch(.homeStopScanAnimation)
         
         store.dispatch(.adDisapear(.native))
@@ -299,10 +300,11 @@ extension HomeView.CenterView {
             return
         }
         
-        store.dispatch(.loadingEvent(.calendar))
+        store.dispatch(.rootManageView(.calendar))
         store.dispatch(.loadingStart)
         store.dispatch(.calendarLoad)
-        store.dispatch(.presentLoading(true))
+        /// present loading
+        store.dispatch(.rootShowLoadingView(true))
         store.dispatch(.homeStopScanAnimation)
         
         store.dispatch(.adDisapear(.native))
@@ -310,9 +312,10 @@ extension HomeView.CenterView {
     
     func photoAction() {
 
-        store.dispatch(.loadingEvent(.photo))
+        store.dispatch(.rootManageView(.photo))
         store.dispatch(.photoLoad(.photo))
-        store.dispatch(.presentLoading(true))
+        /// present loading
+        store.dispatch(.rootShowLoadingView(true))
         store.dispatch(.homeStopScanAnimation)
         store.dispatch(.logEvent(.homePhotoClick))
         store.dispatch(.logEvent(.scanStart))
@@ -322,9 +325,10 @@ extension HomeView.CenterView {
     
     func videoAction() {
 
-        store.dispatch(.loadingEvent(.video))
+        store.dispatch(.rootManageView(.video))
         store.dispatch(.photoLoad(.video))
-        store.dispatch(.presentLoading(true))
+        /// present loading
+        store.dispatch(.rootShowLoadingView(true))
         store.dispatch(.homeStopScanAnimation)
         store.dispatch(.logEvent(.homeVideoClick))
         store.dispatch(.logEvent(.scanStart))
@@ -336,29 +340,41 @@ extension HomeView.CenterView {
 extension HomeView.BottomView {
     func patchAction() {
         if store.state.permission.photoStatus == .denied {
-            store.dispatch(.homeShowPhotoPermission(true))
+            store.dispatch(.rootShowPhotoPermission(true))
             return
         }
-        store.dispatch(.homePushEvent(.patch))
-        store.dispatch(.presentImagePicker)
+        /// manage view 是patch
+        store.dispatch(.rootManageView(.patch))
+        /// 弹出 image picer
+        store.dispatch(.rootShowImagePickerView(true))
+        
+        /// 清除native广告
         store.dispatch(.adDisapear(.native))
     }
     
     func speedAction() {
-        store.dispatch(.homePushEvent(.speed))
-        store.dispatch(.homePush)
+        /// manage view 是speed
+        store.dispatch(.rootManageView(.speed))
+        /// 进入 manage view
+        store.dispatch(.rootShowManageView(true))
         
+        /// 清除native广告
         store.dispatch(.adDisapear(.native))
+        /// 广告加载
         store.dispatch(.adLoad(.native))
     }
 
     func compressionAction() {
         if store.state.permission.photoStatus == .denied {
-            store.dispatch(.homeShowPhotoPermission(true))
+            store.dispatch(.rootShowPhotoPermission(true))
             return
         }
-        store.dispatch(.homePushEvent(.compression))
-        store.dispatch(.presentImagePicker)
+        /// manage view 是patch
+        store.dispatch(.rootManageView(.compression))
+        /// 弹出 image picer
+        store.dispatch(.rootShowImagePickerView(true))
+        
+        /// 清除native广告
         store.dispatch(.adDisapear(.native))
     }
 }

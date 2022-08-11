@@ -87,12 +87,16 @@ struct SpeedView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
+                    /// 返回首页
+                    store.dispatch(.rootShowManageView(false))
+                    store.dispatch(.navigationTitle("Instant Cleaner"))
+
+                    /// 数据清零
                     store.dispatch(.speedPing("0"))
                     store.dispatch(.speedUpload(0))
                     store.dispatch(.speedDownload(0))
-                    
-                    store.state.home.isPushView = false
                 
+                    /// 广告加载
                     store.dispatch(.adDisapear(.native))
                     store.dispatch(.adLoad(.interstitial))
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

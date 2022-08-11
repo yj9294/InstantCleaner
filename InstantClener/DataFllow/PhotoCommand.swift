@@ -38,7 +38,7 @@ struct PhotoFetchCommand: Command {
         
         if let load = store.state.photoManagement.loadModel {
             load.load(event) { progress in
-                if !store.state.loading.isPushEvent {
+                if !store.state.root.isShowManageView {
                     /// 已经离开了loading界面 就不需要更新loading进度了
                     store.dispatch(.loadingProgress(Double(progress) / 100.0))
                 }
@@ -47,7 +47,7 @@ struct PhotoFetchCommand: Command {
                         // 2s内完成
                         maxToken.unseal()
                         minToken.unseal()
-                        if !store.state.loading.isPushEvent {
+                        if !store.state.root.isShowManageView {
                             /// 已经离开了loading界面 就不需要更新loading进度了
                             store.dispatch(.loadingProgress(0.99))
                         }
@@ -101,11 +101,11 @@ struct PhotoFetchCommand: Command {
         default: break
         }
         /// 消失loadingView
-        store.dispatch(.presentLoading(false))
+        store.dispatch(.rootShowLoadingView(false))
         /// 进入management
-        store.dispatch(.loadingPushEvent(true))
+        store.dispatch(.rootShowManageView(true))
         /// 更改导航条title
-        store.dispatch(.navigationTitle(store.state.loading.pushEvent.title))
+        store.dispatch(.navigationTitle(store.state.root.manageEvent.title))
         
         /// 加载广告
         store.dispatch(.adLoad(.native))
