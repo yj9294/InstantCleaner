@@ -358,6 +358,8 @@ extension HomeView.BottomView {
         /// 进入 manage view
         store.dispatch(.rootShowManageView(true))
         
+        store.dispatch(.navigationTitle(store.state.root.manageEvent.title))
+        
         /// 清除native广告
         store.dispatch(.adDisapear(.native))
         /// 广告加载

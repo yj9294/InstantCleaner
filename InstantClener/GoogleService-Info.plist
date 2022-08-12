@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1088795628198-o30gttkvb3ioqj3jpa8nssrfbbadq3eh.apps.googleusercontent.com</string>
+	<string>792013604552-0jju8e7mqdn8durfhrm3ut39l7hljnk7.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1088795628198-o30gttkvb3ioqj3jpa8nssrfbbadq3eh</string>
+	<string>com.googleusercontent.apps.792013604552-0jju8e7mqdn8durfhrm3ut39l7hljnk7</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCL352YPJ8yAhv-WelgAI8CMC0xbuJyJqU</string>
+	<string>AIzaSyAAM-oA11wFuxXQJdSFEWd5QspZQv9kXdg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1088795628198</string>
+	<string>792013604552</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.testbird.spark.2</string>
+	<string>com.instant.clean.smart</string>
 	<key>PROJECT_ID</key>
-	<string>testbird-f2fe7</string>
+	<string>instant-cleaner-dc3af</string>
 	<key>STORAGE_BUCKET</key>
-	<string>testbird-f2fe7.appspot.com</string>
+	<string>instant-cleaner-dc3af.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1088795628198:ios:52ec35ee7ed596e92dda67</string>
+	<string>1:792013604552:ios:f6c2749a9ad0bfe08e07fd</string>
 </dict>
 </plist>

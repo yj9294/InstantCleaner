@@ -115,11 +115,11 @@ struct ManagementView: View {
                 Button(action: {
                     if store.state.photoManagement.push {
                         store.state.photoManagement.push = false
-                        store.dispatch(.navigationTitle("Instant Cleaner"))
 
                         store.dispatch(.adLoad(.native))
                     } else {
                         store.dispatch(.rootShowManageView(false))
+                        store.dispatch(.navigationTitle("Instant Cleaner"))
 
                         store.dispatch(.photoStopLoad)
                         store.dispatch(.homeStartScanAnimation)

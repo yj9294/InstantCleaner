@@ -76,6 +76,8 @@ struct TabbarView: View {
                             store.dispatch(.adLoad(.native))
                         }
                         store.dispatch(.rootShowManageView(true))
+                        
+                        store.dispatch(.navigationTitle(store.state.root.manageEvent.title))
                     } else {
                         store.dispatch(.adLoad(.interstitial))
                         store.dispatch(.adLoad(.native))

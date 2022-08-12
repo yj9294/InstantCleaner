@@ -296,8 +296,12 @@ extension AppState {
                     return "Contact Management"
                 case .calendar:
                     return "Calendar Management"
-                default:
-                    return ""
+                case .patch:
+                    return "Photo Patch"
+                case .speed:
+                    return "Speed Test"
+                case .compression:
+                    return "Compression done"
                 }
             }
             var isPhoto: Bool{

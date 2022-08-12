@@ -38,7 +38,7 @@ struct SettingView: View {
                 .ignoresSafeArea()
         )
         .sheet(isPresented: $isPresentShare) {
-            ShareSheetView(activityItems:["https://itunes.apple.com/cn/app/id"])
+            ShareSheetView(activityItems:["https://itunes.apple.com/cn/app/id1638318930"])
         }
     }
     
