@@ -40,7 +40,7 @@ struct CompressionView: View {
                         .foregroundColor(Color(hex: 0x2E3648))
                 }
                 .padding(.top, 16)
-                .padding(.horizontal, 50)
+                .padding(.horizontal, 30)
 
                 VStack{
                     NativeView(model: store.state.home.adModel)

@@ -114,13 +114,14 @@ struct ManagementView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     if store.state.photoManagement.push {
-                        store.dispatch(.rootShowManageView(false))
+                        store.state.photoManagement.push = false
                         store.dispatch(.navigationTitle("Instant Cleaner"))
 
                         store.dispatch(.adLoad(.native))
                     } else {
-                        store.dispatch(.photoStopLoad)
                         store.dispatch(.rootShowManageView(false))
+
+                        store.dispatch(.photoStopLoad)
                         store.dispatch(.homeStartScanAnimation)
                         store.dispatch(.logEvent(.homeShow))
                         store.dispatch(.logEvent(.homeScan))

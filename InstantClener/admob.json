@@ -1,5 +1,5 @@
 {
-    "installOnlyTouch": true,
+    "installOnlyTouch": false,
     "showTimes":300,
     "clickTimes":50,
     "ads": [
